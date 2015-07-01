@@ -28,6 +28,9 @@
 		3E5E94801B42974100387BE3 /* InsertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E947F1B42974100387BE3 /* InsertViewController.xib */; };
 		3E5E94831B42BC6F00387BE3 /* FoodData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E94821B42BC6F00387BE3 /* FoodData.m */; };
 		3E5E94851B43CA1E00387BE3 /* creme_brelee.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E94841B43CA1E00387BE3 /* creme_brelee.jpg */; };
+		3E5E94871B43F06300387BE3 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E5E94861B43F06300387BE3 /* libsqlite3.dylib */; };
+		3E5E948A1B43F28C00387BE3 /* FoodDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E94891B43F28C00387BE3 /* FoodDatabase.m */; };
+		3E5E948C1B44015800387BE3 /* foodlist.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E948B1B44015800387BE3 /* foodlist.sqlite3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,10 @@
 		3E5E94811B42BC6F00387BE3 /* FoodData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoodData.h; sourceTree = "<group>"; };
 		3E5E94821B42BC6F00387BE3 /* FoodData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoodData.m; sourceTree = "<group>"; };
 		3E5E94841B43CA1E00387BE3 /* creme_brelee.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = creme_brelee.jpg; sourceTree = "<group>"; };
+		3E5E94861B43F06300387BE3 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		3E5E94881B43F28C00387BE3 /* FoodDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoodDatabase.h; sourceTree = "<group>"; };
+		3E5E94891B43F28C00387BE3 /* FoodDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoodDatabase.m; sourceTree = "<group>"; };
+		3E5E948B1B44015800387BE3 /* foodlist.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foodlist.sqlite3; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E5E94871B43F06300387BE3 /* libsqlite3.dylib in Frameworks */,
 				3E5E943E1B4125BE00387BE3 /* CoreGraphics.framework in Frameworks */,
 				3E5E94401B4125BE00387BE3 /* UIKit.framework in Frameworks */,
 				3E5E943C1B4125BE00387BE3 /* Foundation.framework in Frameworks */,
@@ -119,6 +127,7 @@
 		3E5E943A1B4125BE00387BE3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3E5E94861B43F06300387BE3 /* libsqlite3.dylib */,
 				3E5E943B1B4125BE00387BE3 /* Foundation.framework */,
 				3E5E943D1B4125BE00387BE3 /* CoreGraphics.framework */,
 				3E5E943F1B4125BE00387BE3 /* UIKit.framework */,
@@ -130,6 +139,7 @@
 		3E5E94411B4125BE00387BE3 /* SimpleTable */ = {
 			isa = PBXGroup;
 			children = (
+				3E5E948B1B44015800387BE3 /* foodlist.sqlite3 */,
 				3E5E94841B43CA1E00387BE3 /* creme_brelee.jpg */,
 				3E5E944A1B4125BE00387BE3 /* SimpleTableAppDelegate.h */,
 				3E5E944B1B4125BE00387BE3 /* SimpleTableAppDelegate.m */,
@@ -148,6 +158,8 @@
 				3E5E94751B413B2E00387BE3 /* STFood.m */,
 				3E5E94811B42BC6F00387BE3 /* FoodData.h */,
 				3E5E94821B42BC6F00387BE3 /* FoodData.m */,
+				3E5E94881B43F28C00387BE3 /* FoodDatabase.h */,
+				3E5E94891B43F28C00387BE3 /* FoodDatabase.m */,
 			);
 			path = SimpleTable;
 			sourceTree = "<group>";
@@ -263,6 +275,7 @@
 				3E5E94461B4125BE00387BE3 /* InfoPlist.strings in Resources */,
 				3E5E94781B41454B00387BE3 /* SecondViewController.xib in Resources */,
 				3E5E94801B42974100387BE3 /* InsertViewController.xib in Resources */,
+				3E5E948C1B44015800387BE3 /* foodlist.sqlite3 in Resources */,
 				3E5E94851B43CA1E00387BE3 /* creme_brelee.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,6 +301,7 @@
 				3E5E94831B42BC6F00387BE3 /* FoodData.m in Sources */,
 				3E5E947E1B4295AC00387BE3 /* InsertViewController.m in Sources */,
 				3E5E94761B413B2E00387BE3 /* STFood.m in Sources */,
+				3E5E948A1B43F28C00387BE3 /* FoodDatabase.m in Sources */,
 				3E5E94521B4125BE00387BE3 /* SimpleTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

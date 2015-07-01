@@ -11,6 +11,7 @@
 #import "InsertViewController.h"
 #import "STFood.h"
 #import "FoodData.h"
+#import "FoodDatabase.h"
 @interface SimpleTableViewController ()
 
 @end
@@ -44,12 +45,9 @@
      }*/
     NSLog(@"View controller called.\n");
     
-    STFood* food2 = [foodData getFoodByName:@"Egg Benedict"];
-    NSLog(@"Food name is:%@",food2.name);
-    STFood * food3 = [ [STFood alloc] init ];
-    food3.name=@"Full Breakfast";
-    food3.imageName=@"creme_brelee.jpg";
-    food3.ind=2;
+    FoodDatabase *db = [FoodDatabase initDatabase];
+    tableData = [db foodInfos ];
+    
     
     
     //foodData addFood:food3];
@@ -61,8 +59,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //return [tableData count];
-    NSLog(@"Number of foods in tableView:%i",[foodData getNumOfFoods]);
-    return [foodData getNumOfFoods];
+    NSLog(@"Number of foods in tableView:%i",[tableData count]);
+    return [tableData count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -72,7 +70,8 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    STFood * food=[foodData.dataArray objectAtIndex:indexPath.row];
+    //STFood * food=[foodData.dataArray objectAtIndex:indexPath.row];
+    STFood * food = [tableData objectAtIndex:indexPath.row];
     cell.textLabel.text =food.name;
     cell.imageView.image = [UIImage imageNamed:food.imageName];
     return cell;
@@ -110,7 +109,7 @@
 }
 -(void)tableView:(UITableView *)tableview didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableview deselectRowAtIndexPath:indexPath animated:YES];
-    SecondViewController *second = [[SecondViewController alloc] initSecondView: [foodData.dataArray  objectAtIndex:indexPath.row] ]; //initWithNibName:@"SecondViewController" bundle:nil];
+    SecondViewController *second = [[SecondViewController alloc] initSecondView: [tableData  objectAtIndex:indexPath.row] ]; //initWithNibName:@"SecondViewController" bundle:nil];
     
     [self.navigationController pushViewController:second animated:YES ];
     //UITextView *textViewLocal = [[UITextView alloc] initWithFrame:CGRectMake(0,0,140,140)];

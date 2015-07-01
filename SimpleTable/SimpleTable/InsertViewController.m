@@ -9,6 +9,7 @@
 #import "InsertViewController.h"
 #import "SimpleTableViewController.h"
 #import "FoodData.h"
+#import "FoodDatabase.h"
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -63,10 +64,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     STFood * food = [ [STFood alloc] init ];
     food.name=_fieldName.text;
     food.imageName=_fieldImg.text;
-    FoodData* foodData=[ FoodData initialize];
-    food.ind=[foodData getNumOfFoods];
-    NSLog(@"Number of foods:%i",[foodData getNumOfFoods]);
-    [foodData addFood:food];
+    
+    
+    FoodDatabase *db = [FoodDatabase initDatabase];
+    NSArray *foods = [db foodInfos];
+    food.ind=[foods count];
+    NSLog(@"Number of foods:%i",[foods count]);
+    [db insertFood:food ];
+    
+    
+    
     SimpleTableViewController * viewController = [[SimpleTableViewController alloc] init ];
     [self.navigationController pushViewController:viewController animated:YES ];
     //[self.navigationController popViewControllerAnimated:YES];
