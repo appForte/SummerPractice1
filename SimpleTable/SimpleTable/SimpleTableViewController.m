@@ -12,6 +12,8 @@
 #import "STFood.h"
 #import "FoodData.h"
 #import "FoodDatabase.h"
+#import "MyTableViewCell.h"
+#import "FavouriteButtonState.h"
 @interface SimpleTableViewController ()
 
 @end
@@ -31,7 +33,7 @@
     [super viewDidLoad];
     // Initialize table data
     foodData = [FoodData initialize];
-    tableData = [[NSMutableArray alloc] init];
+    
     /*temp = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
      int tempNumOfElements=[temp count];
      for(int i=0;i<tempNumOfElements;i++)
@@ -45,8 +47,7 @@
      }*/
     NSLog(@"View controller called.\n");
     
-    FoodDatabase *db = [FoodDatabase initDatabase];
-    tableData = [db foodInfos ];
+    
     
     
     
@@ -56,6 +57,59 @@
     
     
 }
+
+-(void)sortTableData
+{
+    int k=0;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    do
+    {
+        k=0;
+        for(int i=0; i< [tableData count]-1; i++ )
+        {
+            STFood * food1 = [tableData objectAtIndex:i];
+            STFood * food2 = [tableData objectAtIndex:i+1];
+            
+            NSString * selectedRow1 =[ [NSString alloc] initWithFormat:@"%i",food1.ind];
+            NSNumber *state1 = [defaults objectForKey:selectedRow1];
+            
+            NSString * selectedRow2 =[ [NSString alloc] initWithFormat:@"%i",food2.ind];
+            NSNumber *state2 = [defaults objectForKey:selectedRow2];
+            
+            if(state1!=nil&&state2!=nil)
+            {   NSLog(@"state1:%i state2:%i\n",[state1 intValue],[state2 intValue]);
+                if([state1 intValue] > [state2 intValue])
+                {
+                    NSLog(@"R\n");
+                    [tableData replaceObjectAtIndex:i withObject:food2];
+                    [tableData replaceObjectAtIndex:i+1 withObject:food1];
+                    k=1;
+                }
+                
+            }
+            
+            
+            
+        }
+    }while(k==1);
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+
+    [super viewWillAppear:animated];
+    
+    
+    FoodDatabase *db = [FoodDatabase initDatabase];
+    tableData = [db foodInfos ];
+    [self sortTableData];
+    
+    
+}
+
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //return [tableData count];
@@ -65,15 +119,35 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    MyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        cell = [[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    //STFood * food=[foodData.dataArray objectAtIndex:indexPath.row];
+    
+    
+    //UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    
+    
     STFood * food = [tableData objectAtIndex:indexPath.row];
-    cell.textLabel.text =food.name;
-    cell.imageView.image = [UIImage imageNamed:food.imageName];
+    [cell initWithFood:food andIndexPathRow:food.ind];
+    
+    /*button.frame = CGRectMake(cell.frame.origin.x + 220, cell.frame.origin.y + 10, 100, 30);
+    
+    if([cell isFavourited ] == NO)
+    {
+        [button setImage:[UIImage imageNamed:@"heart.png"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateNormal];
+    }
+    
+    
+    [button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateSelected];
+    [cell addSubview:button];
+    [button addTarget:self action:@selector(favouriteButtonTouched:) forControlEvents:UIControlEventTouchUpInside]; */
+    
     return cell;
 }
 
@@ -90,6 +164,13 @@
     addButton.backgroundColor = [UIColor whiteColor];
     [addButton addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton *refresh = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width-300, 10, 80, 30)];
+    [refresh setTitle:@"Refresh" forState:UIControlStateNormal];
+    [refresh setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+     refresh.backgroundColor = [UIColor whiteColor];
+    [refresh addTarget:self action:@selector(refreshButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, tableView.frame.size.width, 50.0)];
     sectionHeaderView.backgroundColor = [UIColor cyanColor];
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, sectionHeaderView.frame.size.width, 25.0)];
@@ -99,8 +180,15 @@
     [headerLabel setFont:[UIFont fontWithName:@"Verdana" size:20.0]];
     [sectionHeaderView addSubview:headerLabel];
     [sectionHeaderView addSubview:addButton];
+    [sectionHeaderView addSubview:refresh];
     
     return sectionHeaderView;
+}
+- (IBAction)refreshButtonTouched:(id)sender
+{
+    [self viewDidLoad];
+    
+    
 }
 - (IBAction)btnClicked:(id)sender
 {   NSLog(@"Under construction.\n");

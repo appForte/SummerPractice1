@@ -74,9 +74,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
     
-    SimpleTableViewController * viewController = [[SimpleTableViewController alloc] init ];
-    [self.navigationController pushViewController:viewController animated:YES ];
-    //[self.navigationController popViewControllerAnimated:YES];
+    ///SimpleTableViewController * viewController = [[SimpleTableViewController alloc] init ];
+    //[self.navigationController pushViewController:viewController animated:YES ];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
