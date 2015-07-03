@@ -16,4 +16,5 @@
 + (FoodDatabase*)initDatabase;
 - (NSMutableArray *)foodInfos;
 -(void)insertFood:(STFood*)food;
+-(void)deleteFood:(int)foodID;
 @end

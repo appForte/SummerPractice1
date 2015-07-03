@@ -30,7 +30,6 @@
 		3E5E94851B43CA1E00387BE3 /* creme_brelee.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E94841B43CA1E00387BE3 /* creme_brelee.jpg */; };
 		3E5E94871B43F06300387BE3 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E5E94861B43F06300387BE3 /* libsqlite3.dylib */; };
 		3E5E948A1B43F28C00387BE3 /* FoodDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E94891B43F28C00387BE3 /* FoodDatabase.m */; };
-		3E5E948C1B44015800387BE3 /* foodlist.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E948B1B44015800387BE3 /* foodlist.sqlite3 */; };
 		3E5E948E1B45194C00387BE3 /* heart_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E948D1B45194C00387BE3 /* heart_selected.png */; };
 		3E5E94901B45195B00387BE3 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E948F1B45195B00387BE3 /* heart.png */; };
 		3E5E94931B451C8600387BE3 /* MyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E94921B451C8600387BE3 /* MyTableViewCell.m */; };
@@ -81,7 +80,6 @@
 		3E5E94861B43F06300387BE3 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		3E5E94881B43F28C00387BE3 /* FoodDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoodDatabase.h; sourceTree = "<group>"; };
 		3E5E94891B43F28C00387BE3 /* FoodDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoodDatabase.m; sourceTree = "<group>"; };
-		3E5E948B1B44015800387BE3 /* foodlist.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = foodlist.sqlite3; sourceTree = SOURCE_ROOT; };
 		3E5E948D1B45194C00387BE3 /* heart_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_selected.png; sourceTree = SOURCE_ROOT; };
 		3E5E948F1B45195B00387BE3 /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = SOURCE_ROOT; };
 		3E5E94911B451C8600387BE3 /* MyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableViewCell.h; sourceTree = "<group>"; };
@@ -151,7 +149,6 @@
 			children = (
 				3E5E948F1B45195B00387BE3 /* heart.png */,
 				3E5E948D1B45194C00387BE3 /* heart_selected.png */,
-				3E5E948B1B44015800387BE3 /* foodlist.sqlite3 */,
 				3E5E94841B43CA1E00387BE3 /* creme_brelee.jpg */,
 				3E5E944A1B4125BE00387BE3 /* SimpleTableAppDelegate.h */,
 				3E5E944B1B4125BE00387BE3 /* SimpleTableAppDelegate.m */,
@@ -293,7 +290,6 @@
 				3E5E94461B4125BE00387BE3 /* InfoPlist.strings in Resources */,
 				3E5E94781B41454B00387BE3 /* SecondViewController.xib in Resources */,
 				3E5E94801B42974100387BE3 /* InsertViewController.xib in Resources */,
-				3E5E948C1B44015800387BE3 /* foodlist.sqlite3 in Resources */,
 				3E5E94851B43CA1E00387BE3 /* creme_brelee.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

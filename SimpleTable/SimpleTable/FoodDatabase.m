@@ -75,7 +75,7 @@ static FoodDatabase *_database;
 - (NSMutableArray *)foodInfos
 {
     NSMutableArray *retval = [[NSMutableArray alloc] init] ;
-    NSString *query = @"SELECT ind, name, imageName FROM foods ORDER BY name";
+    NSString *query = @"SELECT ind, name, imageName FROM foods";
     sqlite3_stmt *statement;
     
     if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil)== SQLITE_OK)
@@ -106,14 +106,40 @@ static FoodDatabase *_database;
     NSString *stmt = [NSString stringWithFormat:@"INSERT INTO foods values ('%i','%@','%@')"
                       , food.ind,food.name,food.imageName];
     sqlite3_stmt *statement;
+    
     if (sqlite3_exec(_database, [stmt UTF8String], NULL, &statement, NULL)== SQLITE_OK)
     {   NSLog(@"1 row inserted.\n");
+        NSNumber *state = [NSNumber numberWithInteger:0];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString * key = [[NSString alloc] initWithFormat:@"%i",food.ind];
+        [defaults setObject:state forKey:key];
+        [defaults synchronize];
     }
     else
     {
         NSLog(@"Insert error.\n");
     }
     //sqlite3_finalize(statement);
+}
+-(void)deleteFood:(int)foodID
+{
+    
+    
+    NSString *stmt = [NSString stringWithFormat:@"DELETE FROM foods WHERE ind = '%i'"
+                      , foodID];
+    
+    sqlite3_stmt *statement;
+    if (sqlite3_exec(_database, [stmt UTF8String], NULL, &statement, NULL)== SQLITE_OK)
+    {   NSLog(@"Row deleted.\n");
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString * key = [[NSString alloc] initWithFormat:@"%i",foodID];
+        [defaults removeObjectForKey:key];
+        [defaults synchronize];
+    }
+    else
+    {
+        NSLog(@"Delete error.\n");
+    }
 }
 - (void)dealloc
 {

@@ -9,6 +9,10 @@
 #import "MyTableViewCell.h"
 #import "FavouriteButtonState.h"
 @implementation MyTableViewCell
+{
+    UIButton* _button;
+    
+}
 @synthesize _favourite;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -19,52 +23,56 @@
     return self;
 }
 
--(void)initWithFood:(STFood *)food andIndexPathRow:(int)row
+-(void)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex
 {
-    self.imageView.image = [UIImage imageNamed:food.imageName];
-    self.textLabel.text=food.name;
-    self._favourite = NO;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.imageView.contentMode=UIViewContentModeScaleAspectFit;
-    button.frame = CGRectMake(self.frame.origin.x + 220, self.frame.origin.y + 10, 100, 30);
+    button.frame = CGRectMake( 220,  10, 100, 30);
+    
+    self._favourite=state;
     
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * selectedRow =[ [NSString alloc] initWithFormat:@"%i",row];
-    NSNumber *state = [defaults objectForKey:selectedRow];
-    if(state!=nil)
-    {
-        if([state intValue]==1)
-        {   NSLog(@"Favourited\n");
-            self._favourite=YES;
-        }
-        else
-        {
-            NSLog(@"NOT Favourited\n");
-            
-        }
-            
-    }
+    [self addSubview:button];
+    [button addTarget:self action:@selector(favouriteButtonTouched:) forControlEvents:UIControlEventTouchUpInside];    
+    _button=button;
+    [self updateWithFood:food andState:state andRowIndex:rowIndex ];
+}
+
+-(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex
+{
+    self.imageView.image = [UIImage imageNamed:food.imageName];
+    self.textLabel.text=food.name;
+    self._favourite=state;
+    _button.tag=food.ind;
+    _rowIndex=rowIndex;
+    _swipped=NO;
     if(self._favourite == NO)
     {
-        [button setImage:[UIImage imageNamed:@"heart.png"] forState:UIControlStateNormal];
+        [_button setImage:[UIImage imageNamed:@"heart.png"] forState:UIControlStateNormal];
     }
     else
     {
-        [button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateNormal];
+        [_button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateNormal];
     }
     
+    UISwipeGestureRecognizer *swipeGest = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+    swipeGest.direction = UISwipeGestureRecognizerDirectionLeft;
     
-    [button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateSelected];
-    button.tag=row;
-    [self addSubview:button];
-    [button addTarget:self action:@selector(favouriteButtonTouched:) forControlEvents:UIControlEventTouchUpInside];    
+    
+    [self addGestureRecognizer:swipeGest];
     
 }
+-(IBAction)handleSwipeGesture:(id)sender
+{
+    _swipped=YES;
+    [self.delegate didSwipeWithIndex:_rowIndex];
+    NSLog(@"Left gesture on row:%i\n",_rowIndex);
+}
+
 -(IBAction)favouriteButtonTouched:(UIButton*)sender
 {
-    NSLog(@"Button touched at row:%i.\n",sender.tag);
+    NSLog(@"Button touched at id:%i.\n",sender.tag);
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self._favourite=!self._favourite;

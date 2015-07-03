@@ -14,8 +14,7 @@
 #import "FoodDatabase.h"
 #import "MyTableViewCell.h"
 #import "FavouriteButtonState.h"
-@interface SimpleTableViewController ()
-
+@interface SimpleTableViewController () <MyTableViewCellDelegate>
 @end
 
 @implementation SimpleTableViewController
@@ -23,38 +22,15 @@
     NSArray *temp;
     NSMutableArray *tableData;
     FoodData * foodData;
+    UITableView * _tableView;
 }
 - (void)viewDidLoad
 {
-    
-	// Do any additional setup after loading the view, typically from a nib.
-    
-    
     [super viewDidLoad];
-    // Initialize table data
+   
     foodData = [FoodData initialize];
     
-    /*temp = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
-     int tempNumOfElements=[temp count];
-     for(int i=0;i<tempNumOfElements;i++)
-     {   STFood * food =[[STFood alloc] init];
-     food.name=[temp objectAtIndex:i];
-     food.imageName=@"creme_brelee.jpg";
-     food.ind=i;
-     [tableData addObject:(id)food];
-     [foodData addFood:food];
-     
-     }*/
     NSLog(@"View controller called.\n");
-    
-    
-    
-    
-    
-    //foodData addFood:food3];
-    //NSLog(@"Food name is:%@" ,([foodData getFoodByName:@"Full Breakfast"] ).name );
-    
-    
     
 }
 
@@ -93,6 +69,7 @@
         }
     }while(k==1);
     
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -100,62 +77,79 @@
 
     [super viewWillAppear:animated];
     
+    NSLog(@"View will apear called.\n");
+    [self refreshButtonTouched:nil ];
     
-    FoodDatabase *db = [FoodDatabase initDatabase];
-    tableData = [db foodInfos ];
-    [self sortTableData];
+    
     
     
 }
-
+#pragma mark - MyTableViewCellDelegate
+-(void)didSwipeWithIndex:(int)_rowIndex
+{
+    
+    NSLog(@"ROWINDEX IS:%i\n",_rowIndex);
+    
+     FoodDatabase *db = [FoodDatabase initDatabase];
+    [db deleteFood:_rowIndex];
+    
+}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    //return [tableData count];
-    NSLog(@"Number of foods in tableView:%i",[tableData count]);
+{   //_tableView=tableView;
+    //NSLog(@"Number of foods in tableView:%i",[tableData count]);
     return [tableData count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{   // _tableView=tableView;
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
+    
+    STFood * food = [tableData objectAtIndex:indexPath.row];
+    //NSLog(@"Food with id:%i %@",food.ind,food.name);
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * selectedRow =[ [NSString alloc] initWithFormat:@"%i",food.ind];
+    NSNumber *result = [defaults objectForKey:selectedRow];
+    
+    BOOL state = NO;
+    if(result!=nil)
+    {
+        if([result intValue]==1)
+        {   state=YES;
+            NSLog(@"Favourited\n");
+            
+        }
+        else
+        {
+            NSLog(@"NOT Favourited\n");
+            
+        }
+        
+    }
+
+    
     MyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
         cell = [[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-    }
-    
-    
-    //UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    
-    
-    STFood * food = [tableData objectAtIndex:indexPath.row];
-    [cell initWithFood:food andIndexPathRow:food.ind];
-    
-    /*button.frame = CGRectMake(cell.frame.origin.x + 220, cell.frame.origin.y + 10, 100, 30);
-    
-    if([cell isFavourited ] == NO)
-    {
-        [button setImage:[UIImage imageNamed:@"heart.png"] forState:UIControlStateNormal];
+        
+        [cell initWithFood:food andState:state andRowIndex:indexPath.row];
     }
     else
     {
-        [button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateNormal];
+        [cell updateWithFood:food andState:state andRowIndex:indexPath.row];
     }
-    
-    
-    [button setImage:[UIImage imageNamed:@"heart_selected.png"] forState:UIControlStateSelected];
-    [cell addSubview:button];
-    [button addTarget:self action:@selector(favouriteButtonTouched:) forControlEvents:UIControlEventTouchUpInside]; */
-    
+    cell.delegate = self;
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    _tableView=tableView;
     return 50.0f;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    //_tableView=tableView;
     CGRect frame = tableView.frame;
     
     UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width-60, 10, 50, 30)];
@@ -186,12 +180,17 @@
 }
 - (IBAction)refreshButtonTouched:(id)sender
 {
-    [self viewDidLoad];
+    
+    FoodDatabase *db = [FoodDatabase initDatabase];
+    tableData = [db foodInfos ];
+    [self sortTableData];
+    
+    [_tableView reloadData];
     
     
 }
 - (IBAction)btnClicked:(id)sender
-{   NSLog(@"Under construction.\n");
+{
     InsertViewController * insertView = [[InsertViewController alloc] init];
     [self.navigationController pushViewController:insertView animated:YES ];
 }
