@@ -51,7 +51,7 @@ static FoodDatabase *_database;
         
         if (sqlite3_open([path UTF8String], &_database) == SQLITE_OK)
         {
-            const char *sqlStatement = "CREATE TABLE IF NOT EXISTS FOODS (ind number, name TEXT, imageName TEXT)";
+            const char *sqlStatement = "CREATE TABLE IF NOT EXISTS FOODS (ind integer PRIMARY KEY, name TEXT, imageName TEXT)";
             char *error;
             sqlite3_exec(_database, sqlStatement, NULL, NULL, &error);
             
@@ -103,17 +103,20 @@ static FoodDatabase *_database;
 }
 -(void)insertFood:(STFood*)food
 {
-    NSString *stmt = [NSString stringWithFormat:@"INSERT INTO foods values ('%i','%@','%@')"
-                      , food.ind,food.name,food.imageName];
+    NSString *stmt = [NSString stringWithFormat:@"INSERT INTO foods (name, imageName) values ('%@','%@')"
+                      ,food.name,food.imageName];
     sqlite3_stmt *statement;
     
     if (sqlite3_exec(_database, [stmt UTF8String], NULL, &statement, NULL)== SQLITE_OK)
-    {   NSLog(@"1 row inserted.\n");
-        NSNumber *state = [NSNumber numberWithInteger:0];
+    {   NSLog(@"Food with id:%i inserted.\n",food.ind);
+        
+        /*NSNumber *state = [NSNumber numberWithInteger:0];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString * key = [[NSString alloc] initWithFormat:@"%i",food.ind];
         [defaults setObject:state forKey:key];
-        [defaults synchronize];
+        
+        // nem kell defaults
+        [defaults synchronize]; */
     }
     else
     {
@@ -131,10 +134,23 @@ static FoodDatabase *_database;
     sqlite3_stmt *statement;
     if (sqlite3_exec(_database, [stmt UTF8String], NULL, &statement, NULL)== SQLITE_OK)
     {   NSLog(@"Row deleted.\n");
+        
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString * key = [[NSString alloc] initWithFormat:@"%i",foodID];
+        NSString * key =@"favouriteFoods";
+        NSMutableArray * favouriteFoods = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:key]];
+        NSNumber * foodToDelete = [NSNumber numberWithInteger:foodID];
+        
+        if ([favouriteFoods containsObject: foodToDelete])
+        {
+            [favouriteFoods removeObject:foodToDelete];
+        }
+        [defaults setObject:favouriteFoods forKey:key];
+        /*NSString * key = [[NSString alloc] initWithFormat:@"%i",foodID];
         [defaults removeObjectForKey:key];
+        [defaults synchronize]; */
         [defaults synchronize];
+        
+        
     }
     else
     {

@@ -30,18 +30,109 @@
    
     foodData = [FoodData initialize];
     
+    
+    //[self doDownload:@"AAPL"];
+    
     NSLog(@"View controller called.\n");
+    
+   
+    
     
 }
 
+-(NSString*)getDate:(int)option
+{   NSDate *currentDate = [[NSDate alloc] init];
+    
+    // or specifc Timezone: with name
+    NSString *localDateString;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    
+    switch(option)
+    {
+        case 1:
+        {
+           [dateFormatter setDateFormat:@"yyyy"];
+            localDateString = [dateFormatter stringFromDate:currentDate];
+            break;
+        }
+        case 2:
+        {
+            [dateFormatter setDateFormat:@"MM"];
+            localDateString = [dateFormatter stringFromDate:currentDate];
+            break;
+        }
+        default:
+        {
+            [dateFormatter setDateFormat:@"dd"];
+            localDateString = [dateFormatter stringFromDate:currentDate];
+            break;
+        }
+    }
+   
+    
+    return localDateString;
+    
+}
+
+
+- (void)doDownload:(NSString*)what
+{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    
+    
+    
+    dispatch_async(queue, ^{
+        NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=3&b=1&c=2015&d=%@&e=%@&f=%@&g='d'&ignore=.csv",what,[self getDate:2],
+                             [self getDate:3],[self getDate:1]];
+        NSURL *url = [[NSURL alloc] initWithString:strURL];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        NSString * dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Downloading data from: %@\n",strURL);
+            NSLog(@"Data:%@\n",dataStr);
+        });
+    });
+}
 -(void)sortTableData
 {
-    int k=0;
+    //int k=0;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    [tableData sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        STFood * food1 = (STFood *) obj1;
+        STFood * food2 = (STFood *) obj2;
+        
+        /*NSString * selectedRow1 =[ [NSString alloc] initWithFormat:@"%i",food1.ind];
+        NSNumber *state1 = [defaults objectForKey:selectedRow1];
+        
+        NSString * selectedRow2 =[ [NSString alloc] initWithFormat:@"%i",food2.ind];
+        NSNumber *state2 = [defaults objectForKey:selectedRow2];*/
+        
+        
+        
+        NSString * key = @"favouriteFoods";
+        NSMutableArray * favouriteFoods = [defaults objectForKey:key];
+        NSNumber * requestedFood = [NSNumber numberWithInteger:food1.ind];
+        int state1 = 0 , state2 = 0 ;
+        if ([favouriteFoods containsObject: requestedFood])
+        {
+            state1 = 1;
+            
+        }
+        requestedFood = [NSNumber numberWithInteger:food2.ind];
+        if ([favouriteFoods containsObject: requestedFood])
+        {
+            state2 = 1;
+        }
+        return state1 > state2;
+    }];
+    
+    
+ /*
     do
     {
         k=0;
-        for(int i=0; i< [tableData count]-1; i++ )
+        for(int i=0; i < ([tableData count]-1); i++ )
         {
             STFood * food1 = [tableData objectAtIndex:i];
             STFood * food2 = [tableData objectAtIndex:i+1];
@@ -68,7 +159,7 @@
             
         }
     }while(k==1);
-    
+    */
     
 }
 
@@ -92,10 +183,8 @@
     
      FoodDatabase *db = [FoodDatabase initDatabase];
     [db deleteFood:_rowIndex];
-    
+    [self refreshButtonTouched:nil];
 }
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {   //_tableView=tableView;
     //NSLog(@"Number of foods in tableView:%i",[tableData count]);
@@ -106,8 +195,10 @@
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
     STFood * food = [tableData objectAtIndex:indexPath.row];
+    
+    
     //NSLog(@"Food with id:%i %@",food.ind,food.name);
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    /*NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString * selectedRow =[ [NSString alloc] initWithFormat:@"%i",food.ind];
     NSNumber *result = [defaults objectForKey:selectedRow];
     
@@ -125,8 +216,24 @@
             
         }
         
+    }*/
+    
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * key = @"favouriteFoods";
+    NSMutableArray * favouriteFoods = [defaults objectForKey:key];
+    NSNumber * requestedFood = [NSNumber numberWithInteger:food.ind];
+    BOOL state;
+    if ([favouriteFoods containsObject: requestedFood])
+    {
+        state = YES;
+        NSLog(@"Favourited\n");
     }
-
+    else
+    {
+        state = NO;
+        NSLog(@"NOT Favourited\n");
+    }
     
     MyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
@@ -197,8 +304,10 @@
 -(void)tableView:(UITableView *)tableview didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableview deselectRowAtIndexPath:indexPath animated:YES];
     SecondViewController *second = [[SecondViewController alloc] initSecondView: [tableData  objectAtIndex:indexPath.row] ]; //initWithNibName:@"SecondViewController" bundle:nil];
-    
+    STFood * food = [tableData objectAtIndex:indexPath.row];
+    [self doDownload:food.name];
     [self.navigationController pushViewController:second animated:YES ];
+    
     //UITextView *textViewLocal = [[UITextView alloc] initWithFrame:CGRectMake(0,0,140,140)];
     //second.textView=textViewLocal;
     //[second.textView setText:@"abc"];
