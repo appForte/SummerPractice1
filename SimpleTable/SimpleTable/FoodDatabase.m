@@ -8,6 +8,7 @@
 
 #import "FoodDatabase.h"
 #import "STFood.h"
+#import "Quote.h"
 
 @implementation FoodDatabase
 static FoodDatabase *_database;
@@ -51,8 +52,14 @@ static FoodDatabase *_database;
         
         if (sqlite3_open([path UTF8String], &_database) == SQLITE_OK)
         {
-            const char *sqlStatement = "CREATE TABLE IF NOT EXISTS FOODS (ind integer PRIMARY KEY, name TEXT, imageName TEXT)";
+            const char *sqlStatement;
             char *error;
+            sqlStatement="CREATE TABLE IF NOT EXISTS FOODS (ind integer PRIMARY KEY, name TEXT, imageName TEXT)";
+            
+            
+            
+                //sqlStatement="CREATE TABLE IF NOT EXISTS FINDATAS (finDataName TEXT, date TEXT, open REAL, high REAL, low REAL, close REAL, volume REAL, adjClose REAL)";
+            
             sqlite3_exec(_database, sqlStatement, NULL, NULL, &error);
             
         }
@@ -124,6 +131,7 @@ static FoodDatabase *_database;
     }
     //sqlite3_finalize(statement);
 }
+
 -(void)deleteFood:(int)foodID
 {
     

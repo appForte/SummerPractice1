@@ -14,6 +14,8 @@
 #import "FoodDatabase.h"
 #import "MyTableViewCell.h"
 #import "FavouriteButtonState.h"
+#import "Quote.h"
+#import "FinanceDatabase.h"
 @interface SimpleTableViewController () <MyTableViewCellDelegate>
 @end
 
@@ -37,13 +39,15 @@
     
    
     
-    
 }
-
--(NSString*)getDate:(int)option
+-(NSArray*)tokenizeByRows:(NSString *) dataStr
+{
+   NSArray *rows = [dataStr componentsSeparatedByString: @"\n"];
+    return rows;
+}
+-(NSString*)getDate:(DATE_OPTION)option
 {   NSDate *currentDate = [[NSDate alloc] init];
     
-    // or specifc Timezone: with name
     NSString *localDateString;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
@@ -75,6 +79,40 @@
 }
 
 
+
+
+-(NSMutableArray*)makeQuotesFromData:(NSString*)dataStr withName:(NSString*)name
+{
+    NSArray* dataRows =[self tokenizeByRows:dataStr];
+    NSMutableArray * quotes = [ [NSMutableArray alloc] init ];
+    
+    //NSArray * rowContent = [ [NSArray alloc] init];
+    int numberOfRows = [dataRows count];
+    if(numberOfRows>0)
+    {
+        for(int i=1 ; i< numberOfRows-1; i++)
+        {   NSArray * rowContent = [ [NSArray alloc] init];
+            
+            rowContent= [ [dataRows objectAtIndex:i] componentsSeparatedByString:@","];
+            Quote * quote = [[Quote alloc] init];
+            quote.name=name;
+            quote.date=[MyDate makeDateFromString:[rowContent objectAtIndex:0]];
+            quote.open=[[rowContent objectAtIndex:1] doubleValue];
+            quote.high=[[rowContent objectAtIndex:2] doubleValue];
+            quote.low=[[rowContent objectAtIndex:3] doubleValue];
+            quote.close=[[rowContent objectAtIndex:4] doubleValue];
+            quote.volume=[[rowContent objectAtIndex:5] doubleValue];
+            quote.adjClose=[[rowContent objectAtIndex:6] doubleValue];
+            
+            [quotes addObject:(id)quote];
+            
+            
+        }
+    }
+    return quotes;
+    
+}
+
 - (void)doDownload:(NSString*)what
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -82,14 +120,45 @@
     
     
     dispatch_async(queue, ^{
-        NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=3&b=1&c=2015&d=%@&e=%@&f=%@&g='d'&ignore=.csv",what,[self getDate:2],
-                             [self getDate:3],[self getDate:1]];
+        NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=3&b=1&c=2015&d=%@&e=%@&f=%@&g='d'&ignore=.csv",what,
+                             [self getDate:MONTH],[self getDate:DAY],[self getDate:YEAR]];
         NSURL *url = [[NSURL alloc] initWithString:strURL];
         NSData *data = [NSData dataWithContentsOfURL:url];
         NSString * dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"Downloading data from: %@\n",strURL);
-            NSLog(@"Data:%@\n",dataStr);
+            //NSLog(@"Data:%@\n",dataStr);
+            
+            FinanceDatabase *finDb = [FinanceDatabase initDatabase];
+            
+            
+            NSMutableArray* quotes =[self makeQuotesFromData:dataStr withName: what];
+            MyDate * date = [ [MyDate alloc] init ];
+            date = [finDb getDateOnlyFor:what];
+            for(Quote* quote in quotes)
+            {
+                
+                 NSLog(@"Date:%i-%i-%i Open:%lf High:%lf Low:%lf Close:%lf Volume:%lf AdjClose:%lf\n\n\n",quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
+                
+                
+                if([quote.date isBiggerThan:date])
+                {
+                    [finDb insertFinData:quote];
+                }
+                
+                
+            }
+            
+           
+            NSLog(@"DATE FROM DB WITH GET DATE FUNCTION: %i-%i-%i",date.year,date.month,date.day);
+            
+            NSMutableArray * queryResult = [finDb financialInfosFor:what];
+            NSLog(@"DB query result:\n\n\n");
+            for(Quote* quote in queryResult)
+            {
+                NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
+            }
+            
         });
     });
 }
@@ -187,7 +256,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {   //_tableView=tableView;
-    //NSLog(@"Number of foods in tableView:%i",[tableData count]);
+    
     return [tableData count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
