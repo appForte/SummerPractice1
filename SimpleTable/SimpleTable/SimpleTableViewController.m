@@ -45,38 +45,6 @@
    NSArray *rows = [dataStr componentsSeparatedByString: @"\n"];
     return rows;
 }
--(NSString*)getDate:(DATE_OPTION)option
-{   NSDate *currentDate = [[NSDate alloc] init];
-    
-    NSString *localDateString;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    
-    switch(option)
-    {
-        case 1:
-        {
-           [dateFormatter setDateFormat:@"yyyy"];
-            localDateString = [dateFormatter stringFromDate:currentDate];
-            break;
-        }
-        case 2:
-        {
-            [dateFormatter setDateFormat:@"MM"];
-            localDateString = [dateFormatter stringFromDate:currentDate];
-            break;
-        }
-        default:
-        {
-            [dateFormatter setDateFormat:@"dd"];
-            localDateString = [dateFormatter stringFromDate:currentDate];
-            break;
-        }
-    }
-   
-    
-    return localDateString;
-    
-}
 
 
 
@@ -119,48 +87,94 @@
     
     
     
-    dispatch_async(queue, ^{
-        NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=3&b=1&c=2015&d=%@&e=%@&f=%@&g='d'&ignore=.csv",what,
-                             [self getDate:MONTH],[self getDate:DAY],[self getDate:YEAR]];
-        NSURL *url = [[NSURL alloc] initWithString:strURL];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        NSString * dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Downloading data from: %@\n",strURL);
-            //NSLog(@"Data:%@\n",dataStr);
+    FinanceDatabase *finDb = [FinanceDatabase initDatabase];
+    MyDate * date = [ [MyDate alloc] init ];
+    date = [finDb getDateOnlyFor:what];
+    MyDate * dateActual = [ [MyDate alloc] init ];
+    dateActual.year= [[MyDate getDate:YEAR] intValue];
+    dateActual.month=[[MyDate getDate:MONTH] intValue];
+    dateActual.day=[[MyDate getDate:DAY] intValue];
+    
+    NSString *start =[NSString stringWithFormat:@"%i-%i-%i",date.year,date.month,date.day];
+    NSString *end = [NSString stringWithFormat:@"%i-%i-%i",dateActual.year,dateActual.month,dateActual.day];
+    
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"yyyy-MM-dd"];
+    NSDate *startDate = [f dateFromString:start];
+    NSDate *endDate = [f dateFromString:end];
+    
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *components = [gregorianCalendar components:NSDayCalendarUnit
+                                                        fromDate:startDate
+                                                          toDate:endDate
+                                                         options:0];
+    NSLog(@"%i",components.day);
+    
+    
+    if(components.day>1)
+    {
+          dispatch_async(queue, ^{
+        
+        
+        
+        
+        
+           NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=%i&b=%i&c=%i&d=%@&e=%@&f=%@&g='d'&ignore=.csv",what,date.month,date.day,date.year,[MyDate getDate:MONTH],[MyDate getDate:DAY],[MyDate getDate:YEAR]];
+        
+        
+           NSURL *url = [[NSURL alloc] initWithString:strURL];
+           NSData *data = [NSData dataWithContentsOfURL:url];
+           NSString * dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+           dispatch_async(dispatch_get_main_queue(), ^{
+             NSLog(@"Downloading data from: %@\n",strURL);
+              
             
-            FinanceDatabase *finDb = [FinanceDatabase initDatabase];
             
+             NSMutableArray* quotes =[self makeQuotesFromData:dataStr withName: what];
             
-            NSMutableArray* quotes =[self makeQuotesFromData:dataStr withName: what];
-            MyDate * date = [ [MyDate alloc] init ];
-            date = [finDb getDateOnlyFor:what];
-            for(Quote* quote in quotes)
-            {
+             for(Quote* quote in quotes)
+             {
                 
                  NSLog(@"Date:%i-%i-%i Open:%lf High:%lf Low:%lf Close:%lf Volume:%lf AdjClose:%lf\n\n\n",quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
                 
-                
-                if([quote.date isBiggerThan:date])
-                {
-                    [finDb insertFinData:quote];
-                }
+                [finDb insertFinData:quote];
                 
                 
-            }
-            
+                
+             }
+            //[finDb deleteFindatas];
            
-            NSLog(@"DATE FROM DB WITH GET DATE FUNCTION: %i-%i-%i",date.year,date.month,date.day);
+             NSLog(@"DATE FROM DB WITH GET DATE FUNCTION: %i-%i-%i",date.year,date.month,date.day);
             
+             NSMutableArray * queryResult = [finDb financialInfosFor:what];
+             NSLog(@"DB query result:\n\n\n");
+              
+             for(Quote* quote in queryResult)
+             {
+                NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
+             }
+            
+            });
+        
             NSMutableArray * queryResult = [finDb financialInfosFor:what];
             NSLog(@"DB query result:\n\n\n");
             for(Quote* quote in queryResult)
             {
                 NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
             }
-            
         });
-    });
+    }
+    else
+    {
+        
+        NSMutableArray * queryResult = [finDb financialInfosFor:what];
+        NSLog(@"NO DOWNLOADED DATA : DB query result:\n\n\n");
+        for(Quote* quote in queryResult)
+        {
+            NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
+        }
+        
+    }
 }
 -(void)sortTableData
 {
@@ -250,8 +264,14 @@
     
     NSLog(@"ROWINDEX IS:%i\n",_rowIndex);
     
-     FoodDatabase *db = [FoodDatabase initDatabase];
+    FoodDatabase *db = [FoodDatabase initDatabase];
+    NSString *deleteWhat = [db getFoodNameForId:_rowIndex];
     [db deleteFood:_rowIndex];
+    
+    FinanceDatabase *finDb = [FinanceDatabase initDatabase];
+    [finDb deleteFindatasFor:deleteWhat];
+    
+    
     [self refreshButtonTouched:nil];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

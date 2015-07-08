@@ -71,7 +71,7 @@ static FinanceDatabase *_database;
 - (NSMutableArray *)financialInfosFor:(NSString*)what
 {
     NSMutableArray *retval = [[NSMutableArray alloc] init] ;
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM findatas WHERE finDataName = '%@' ORDER BY date DESC " ,what];
+    NSString *query = [NSString stringWithFormat:@"SELECT * FROM findatas WHERE finDataName = '%@' ORDER BY date  DESC " ,what];
     //NSString *query = @"SELECT * FROM findatas ORDER BY date DESC ";
     sqlite3_stmt *statement;
     
@@ -114,8 +114,12 @@ static FinanceDatabase *_database;
     NSString *query = [NSString stringWithFormat:@"SELECT date FROM findatas WHERE finDataName = '%@' ORDER BY date DESC LIMIT 1" ,what];
     sqlite3_stmt *statement;
     MyDate *date=[[MyDate alloc] init ];
+    date.year=[[MyDate getDate:YEAR] intValue]-1;
+    date.month=[[MyDate getDate:MONTH] intValue];
+    date.day=[[MyDate getDate:DAY] intValue];
     if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil)== SQLITE_OK)
     {
+        
         while (sqlite3_step(statement) == SQLITE_ROW)
         {
             
@@ -131,8 +135,22 @@ static FinanceDatabase *_database;
     return date;
 }
 -(void)insertFinData:(Quote*)quote
-{
-    NSString* formattedDate = [NSString stringWithFormat:@"%i-%i-%i",quote.date.year,quote.date.month,quote.date.day];
+{    NSString* formattedDate;
+    if(quote.date.day>=1&&quote.date.day<=9)
+    {   formattedDate = [NSString stringWithFormat:@"%i-%i-0%i",quote.date.year,quote.date.month,quote.date.day];
+        if(quote.date.month>=1&&quote.date.month<=9)
+        {
+            formattedDate = [NSString stringWithFormat:@"%i-0%i-0%i",quote.date.year,quote.date.month,quote.date.day];
+        }
+    }
+    else
+    {
+        formattedDate = [NSString stringWithFormat:@"%i-%i-%i",quote.date.year,quote.date.month,quote.date.day];
+        if(quote.date.month>=1&&quote.date.month<=9)
+        {
+            formattedDate = [NSString stringWithFormat:@"%i-0%i-%i",quote.date.year,quote.date.month,quote.date.day];
+        }
+    }
     NSString *stmt = [NSString stringWithFormat:@"INSERT INTO findatas (finDataName, date, open, high, low, close, volume, adjClose) values ('%@','%@','%lf','%lf','%lf','%lf','%lf','%lf')", quote.name, formattedDate, quote.open, quote.high, quote.low, quote.close, quote.volume, quote.adjClose ];
     sqlite3_stmt *statement;
     
@@ -153,11 +171,11 @@ static FinanceDatabase *_database;
     }
     //sqlite3_finalize(statement);
 }
--(void)deleteFindatas
+-(void)deleteFindatasFor:(NSString*)what
 {
     
     
-    NSString *stmt = [NSString stringWithFormat:@"DELETE FROM findatas"];
+    NSString *stmt = [NSString stringWithFormat:@"DELETE FROM findatas WHERE finDataName = '%@' ",what];
     
     sqlite3_stmt *statement;
     if (sqlite3_exec(_database, [stmt UTF8String], NULL, &statement, NULL)== SQLITE_OK)

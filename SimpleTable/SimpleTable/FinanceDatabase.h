@@ -17,6 +17,6 @@
 + (FinanceDatabase*)initDatabase;
 - (NSMutableArray *)financialInfosFor:(NSString*)what;
 -(void)insertFinData:(Quote*)quote;
--(void)deleteFindatas;
+-(void)deleteFindatasFor:(NSString*)what;
 - (MyDate *)getDateOnlyFor:(NSString*)what;
 @end

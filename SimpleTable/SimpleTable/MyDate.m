@@ -50,4 +50,36 @@
     return result;
     
 }
++(NSString*)getDate:(DATE_OPTION)option
+{   NSDate *currentDate = [[NSDate alloc] init];
+    
+    NSString *localDateString;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    
+    switch(option)
+    {
+        case 1:
+        {
+            [dateFormatter setDateFormat:@"yyyy"];
+            localDateString = [dateFormatter stringFromDate:currentDate];
+            break;
+        }
+        case 2:
+        {
+            [dateFormatter setDateFormat:@"MM"];
+            localDateString = [dateFormatter stringFromDate:currentDate];
+            break;
+        }
+        default:
+        {
+            [dateFormatter setDateFormat:@"dd"];
+            localDateString = [dateFormatter stringFromDate:currentDate];
+            break;
+        }
+    }
+    
+    
+    return localDateString;
+    
+}
 @end

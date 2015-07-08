@@ -22,6 +22,7 @@ typedef enum
 }
 + (FoodDatabase*)initDatabase;
 - (NSMutableArray *)foodInfos;
+-(NSString*)getFoodNameForId:(int)foodID;
 -(void)insertFood:(STFood*)food;
 -(void)deleteFood:(int)foodID;
 @end

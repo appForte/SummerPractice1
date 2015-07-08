@@ -108,6 +108,22 @@ static FoodDatabase *_database;
     }
     return retval;
 }
+-(NSString*)getFoodNameForId:(int)foodID
+{
+    NSString *query = [NSString stringWithFormat:@"SELECT name FROM foods WHERE ind = %i",foodID];
+    sqlite3_stmt *statement;
+    NSString *name;
+    if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil)== SQLITE_OK)
+    {
+        while (sqlite3_step(statement) == SQLITE_ROW)
+        {
+            
+            char *nameChars = (char *) sqlite3_column_text(statement, 0);
+            name = [[NSString alloc] initWithUTF8String:nameChars];
+        }
+    }
+    return name;
+}
 -(void)insertFood:(STFood*)food
 {
     NSString *stmt = [NSString stringWithFormat:@"INSERT INTO foods (name, imageName) values ('%@','%@')"
