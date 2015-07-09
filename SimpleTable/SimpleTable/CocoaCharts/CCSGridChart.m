@@ -953,4 +953,8 @@ float _minDistance = 8;
     }
 }
 
+-(void)dealloc {
+    [self removeObservers];
+}
+
 @end

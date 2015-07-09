@@ -69,9 +69,8 @@
     if(numberOfRows>0)
     {
         for(int i=1 ; i< numberOfRows-1; i++)
-        {   NSArray * rowContent = [ [NSArray alloc] init];
-            
-            rowContent= [ [dataRows objectAtIndex:i] componentsSeparatedByString:@","];
+        {
+            NSArray * rowContent = [[dataRows objectAtIndex:i] componentsSeparatedByString:@","];
             Quote * quote = [[Quote alloc] init];
             quote.name=name;
             quote.date=[MyDate makeDateFromString:[rowContent objectAtIndex:0]];
@@ -98,9 +97,8 @@
     
     
     FinanceDatabase *finDb = [FinanceDatabase initDatabase];
-    MyDate * date = [ [MyDate alloc] init ];
-    date = [finDb getDateOnlyFor:what];
-    MyDate * dateActual = [ [MyDate alloc] init ];
+    MyDate * date = [finDb getDateOnlyFor:what];
+    MyDate * dateActual = [[MyDate alloc] init];
     dateActual.year= [[MyDate getDate:YEAR] intValue];
     dateActual.month=[[MyDate getDate:MONTH] intValue];
     dateActual.day=[[MyDate getDate:DAY] intValue];
@@ -433,9 +431,10 @@
     InsertViewController * insertView = [[InsertViewController alloc] init];
     [self.navigationController pushViewController:insertView animated:YES ];
 }
+
 -(void)tableView:(UITableView *)tableview didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableview deselectRowAtIndexPath:indexPath animated:YES];
-    SecondViewController *second = [[SecondViewController alloc] initSecondView: [tableData  objectAtIndex:indexPath.row] ]; //initWithNibName:@"SecondViewController" bundle:nil];
+    //SecondViewController *second = [[SecondViewController alloc] initSecondView: [tableData  objectAtIndex:indexPath.row] ];
     
     STFood * food = [tableData objectAtIndex:indexPath.row];
     [self doDownload:food.name];

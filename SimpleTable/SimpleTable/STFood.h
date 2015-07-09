@@ -10,9 +10,6 @@
 
 @interface STFood : NSObject
 {
-    NSString * name;
-    NSString * imageName;
-    int ind;
 }
 @property (nonatomic,strong) NSString* name,*imageName;
 @property (nonatomic,assign) int ind;

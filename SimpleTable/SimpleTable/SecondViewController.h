@@ -17,5 +17,5 @@
     __weak IBOutlet UIButton * _button;
 }
 -(id)initSecondView:(STFood*)food;
-//@property (nonatomic, strong) IBOutlet UITextView * textView;
+
 @end

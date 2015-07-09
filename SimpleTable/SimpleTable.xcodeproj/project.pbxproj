@@ -34,6 +34,17 @@
 		3E5E94901B45195B00387BE3 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E948F1B45195B00387BE3 /* heart.png */; };
 		3E5E94931B451C8600387BE3 /* MyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E94921B451C8600387BE3 /* MyTableViewCell.m */; };
 		3E5E94961B45396D00387BE3 /* FavouriteButtonState.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E94951B45396D00387BE3 /* FavouriteButtonState.m */; };
+		D0511C2F1B4E972D0039CA58 /* CCSBaseChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C1A1B4E972D0039CA58 /* CCSBaseChartView.m */; };
+		D0511C301B4E972D0039CA58 /* CCSBaseData.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C1C1B4E972D0039CA58 /* CCSBaseData.m */; };
+		D0511C311B4E972D0039CA58 /* CCSCandleStickChart.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C1E1B4E972D0039CA58 /* CCSCandleStickChart.m */; };
+		D0511C321B4E972D0039CA58 /* CCSCandleStickChartData.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C201B4E972D0039CA58 /* CCSCandleStickChartData.m */; };
+		D0511C331B4E972D0039CA58 /* CCSCandleStickChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C221B4E972D0039CA58 /* CCSCandleStickChartViewController.m */; };
+		D0511C341B4E972D0039CA58 /* CCSGridChart.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C241B4E972D0039CA58 /* CCSGridChart.m */; };
+		D0511C351B4E972D0039CA58 /* CCSStickChart.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C261B4E972D0039CA58 /* CCSStickChart.m */; };
+		D0511C361B4E972D0039CA58 /* CCSStickChartData.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C281B4E972D0039CA58 /* CCSStickChartData.m */; };
+		D0511C371B4E972D0039CA58 /* FinanceDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C2A1B4E972D0039CA58 /* FinanceDatabase.m */; };
+		D0511C381B4E972D0039CA58 /* MyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C2C1B4E972D0039CA58 /* MyDate.m */; };
+		D0511C391B4E972D0039CA58 /* Quote.m in Sources */ = {isa = PBXBuildFile; fileRef = D0511C2E1B4E972D0039CA58 /* Quote.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +97,28 @@
 		3E5E94921B451C8600387BE3 /* MyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableViewCell.m; sourceTree = "<group>"; };
 		3E5E94941B45396D00387BE3 /* FavouriteButtonState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteButtonState.h; sourceTree = "<group>"; };
 		3E5E94951B45396D00387BE3 /* FavouriteButtonState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteButtonState.m; sourceTree = "<group>"; };
+		D0511C191B4E972D0039CA58 /* CCSBaseChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSBaseChartView.h; sourceTree = "<group>"; };
+		D0511C1A1B4E972D0039CA58 /* CCSBaseChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSBaseChartView.m; sourceTree = "<group>"; };
+		D0511C1B1B4E972D0039CA58 /* CCSBaseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSBaseData.h; sourceTree = "<group>"; };
+		D0511C1C1B4E972D0039CA58 /* CCSBaseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSBaseData.m; sourceTree = "<group>"; };
+		D0511C1D1B4E972D0039CA58 /* CCSCandleStickChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSCandleStickChart.h; sourceTree = "<group>"; };
+		D0511C1E1B4E972D0039CA58 /* CCSCandleStickChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSCandleStickChart.m; sourceTree = "<group>"; };
+		D0511C1F1B4E972D0039CA58 /* CCSCandleStickChartData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSCandleStickChartData.h; sourceTree = "<group>"; };
+		D0511C201B4E972D0039CA58 /* CCSCandleStickChartData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSCandleStickChartData.m; sourceTree = "<group>"; };
+		D0511C211B4E972D0039CA58 /* CCSCandleStickChartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSCandleStickChartViewController.h; sourceTree = "<group>"; };
+		D0511C221B4E972D0039CA58 /* CCSCandleStickChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSCandleStickChartViewController.m; sourceTree = "<group>"; };
+		D0511C231B4E972D0039CA58 /* CCSGridChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSGridChart.h; sourceTree = "<group>"; };
+		D0511C241B4E972D0039CA58 /* CCSGridChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSGridChart.m; sourceTree = "<group>"; };
+		D0511C251B4E972D0039CA58 /* CCSStickChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSStickChart.h; sourceTree = "<group>"; };
+		D0511C261B4E972D0039CA58 /* CCSStickChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSStickChart.m; sourceTree = "<group>"; };
+		D0511C271B4E972D0039CA58 /* CCSStickChartData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSStickChartData.h; sourceTree = "<group>"; };
+		D0511C281B4E972D0039CA58 /* CCSStickChartData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSStickChartData.m; sourceTree = "<group>"; };
+		D0511C291B4E972D0039CA58 /* FinanceDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinanceDatabase.h; sourceTree = "<group>"; };
+		D0511C2A1B4E972D0039CA58 /* FinanceDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinanceDatabase.m; sourceTree = "<group>"; };
+		D0511C2B1B4E972D0039CA58 /* MyDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDate.h; sourceTree = "<group>"; };
+		D0511C2C1B4E972D0039CA58 /* MyDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDate.m; sourceTree = "<group>"; };
+		D0511C2D1B4E972D0039CA58 /* Quote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quote.h; sourceTree = "<group>"; };
+		D0511C2E1B4E972D0039CA58 /* Quote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quote.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +180,13 @@
 		3E5E94411B4125BE00387BE3 /* SimpleTable */ = {
 			isa = PBXGroup;
 			children = (
+				D0511C181B4E972D0039CA58 /* CocoaCharts */,
+				D0511C291B4E972D0039CA58 /* FinanceDatabase.h */,
+				D0511C2A1B4E972D0039CA58 /* FinanceDatabase.m */,
+				D0511C2B1B4E972D0039CA58 /* MyDate.h */,
+				D0511C2C1B4E972D0039CA58 /* MyDate.m */,
+				D0511C2D1B4E972D0039CA58 /* Quote.h */,
+				D0511C2E1B4E972D0039CA58 /* Quote.m */,
 				3E5E948F1B45195B00387BE3 /* heart.png */,
 				3E5E948D1B45194C00387BE3 /* heart_selected.png */,
 				3E5E94841B43CA1E00387BE3 /* creme_brelee.jpg */,
@@ -204,6 +244,29 @@
 				3E5E94631B4125BE00387BE3 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D0511C181B4E972D0039CA58 /* CocoaCharts */ = {
+			isa = PBXGroup;
+			children = (
+				D0511C191B4E972D0039CA58 /* CCSBaseChartView.h */,
+				D0511C1A1B4E972D0039CA58 /* CCSBaseChartView.m */,
+				D0511C1B1B4E972D0039CA58 /* CCSBaseData.h */,
+				D0511C1C1B4E972D0039CA58 /* CCSBaseData.m */,
+				D0511C1D1B4E972D0039CA58 /* CCSCandleStickChart.h */,
+				D0511C1E1B4E972D0039CA58 /* CCSCandleStickChart.m */,
+				D0511C1F1B4E972D0039CA58 /* CCSCandleStickChartData.h */,
+				D0511C201B4E972D0039CA58 /* CCSCandleStickChartData.m */,
+				D0511C211B4E972D0039CA58 /* CCSCandleStickChartViewController.h */,
+				D0511C221B4E972D0039CA58 /* CCSCandleStickChartViewController.m */,
+				D0511C231B4E972D0039CA58 /* CCSGridChart.h */,
+				D0511C241B4E972D0039CA58 /* CCSGridChart.m */,
+				D0511C251B4E972D0039CA58 /* CCSStickChart.h */,
+				D0511C261B4E972D0039CA58 /* CCSStickChart.m */,
+				D0511C271B4E972D0039CA58 /* CCSStickChartData.h */,
+				D0511C281B4E972D0039CA58 /* CCSStickChartData.m */,
+			);
+			path = CocoaCharts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,16 +372,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0511C391B4E972D0039CA58 /* Quote.m in Sources */,
+				D0511C311B4E972D0039CA58 /* CCSCandleStickChart.m in Sources */,
 				3E5E947B1B41466600387BE3 /* SecondViewController.m in Sources */,
+				D0511C2F1B4E972D0039CA58 /* CCSBaseChartView.m in Sources */,
 				3E5E94961B45396D00387BE3 /* FavouriteButtonState.m in Sources */,
 				3E5E94481B4125BE00387BE3 /* main.m in Sources */,
 				3E5E944C1B4125BE00387BE3 /* SimpleTableAppDelegate.m in Sources */,
 				3E5E94931B451C8600387BE3 /* MyTableViewCell.m in Sources */,
+				D0511C301B4E972D0039CA58 /* CCSBaseData.m in Sources */,
 				3E5E94831B42BC6F00387BE3 /* FoodData.m in Sources */,
 				3E5E947E1B4295AC00387BE3 /* InsertViewController.m in Sources */,
+				D0511C341B4E972D0039CA58 /* CCSGridChart.m in Sources */,
+				D0511C321B4E972D0039CA58 /* CCSCandleStickChartData.m in Sources */,
+				D0511C371B4E972D0039CA58 /* FinanceDatabase.m in Sources */,
+				D0511C331B4E972D0039CA58 /* CCSCandleStickChartViewController.m in Sources */,
 				3E5E94761B413B2E00387BE3 /* STFood.m in Sources */,
+				D0511C381B4E972D0039CA58 /* MyDate.m in Sources */,
 				3E5E948A1B43F28C00387BE3 /* FoodDatabase.m in Sources */,
 				3E5E94521B4125BE00387BE3 /* SimpleTableViewController.m in Sources */,
+				D0511C351B4E972D0039CA58 /* CCSStickChart.m in Sources */,
+				D0511C361B4E972D0039CA58 /* CCSStickChartData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +514,7 @@
 				INFOPLIST_FILE = "SimpleTable/SimpleTable-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -455,6 +530,7 @@
 				INFOPLIST_FILE = "SimpleTable/SimpleTable-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

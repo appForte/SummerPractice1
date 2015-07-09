@@ -9,7 +9,8 @@
 #import "SecondViewController.h"
 #import "SimpleTableViewController.h"
 @interface SecondViewController ()
-{   NSString * info;
+{
+    NSString * info;
     STFood * foodInfo;
     
 }
@@ -20,9 +21,15 @@
 
 //@synthesize textView;
 -(id)initSecondView:(STFood*)food
-{   info=[[NSString alloc] initWithFormat:@"\n\nFood name: %@\n\n Image name:%@\n\n",food.name,food.imageName];
-     foodInfo=food;
-        return self;
+{
+    self = [super init];
+    
+    if (self) {
+        
+        info = [[NSString alloc] initWithFormat:@"\n\nFood name: %@\n\n Image name:%@\n\n",food.name,food.imageName];
+        foodInfo = food;
+    }
+    return self;
     
 }
 
@@ -50,7 +57,7 @@
     [ but setExclusiveTouch:YES];
     
     // if you like to add backgroundImage else no need
-        
+    
     [self.view addSubview:but];
 }
 - (IBAction)btnClicked:(id)sender
