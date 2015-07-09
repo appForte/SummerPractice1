@@ -16,7 +16,13 @@
 #import "FavouriteButtonState.h"
 #import "Quote.h"
 #import "FinanceDatabase.h"
+#import "CocoaCharts/CCSCandleStickChartViewController.h"
+#import "CocoaCharts/CCSCandleStickChartData.h"
 @interface SimpleTableViewController () <MyTableViewCellDelegate>
+{
+     NSMutableArray * candlestickData;
+    UIActivityIndicatorView *activityIndicator;
+}
 @end
 
 @implementation SimpleTableViewController
@@ -31,7 +37,11 @@
     [super viewDidLoad];
    
     foodData = [FoodData initialize];
+    activityIndicator=[[UIActivityIndicatorView alloc]
+     initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     
+    [activityIndicator setHidesWhenStopped:YES];
+    activityIndicator.center=self.view.center;
     
     //[self doDownload:@"AAPL"];
     
@@ -83,7 +93,7 @@
 
 - (void)doDownload:(NSString*)what
 {
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    
     
     
     
@@ -113,20 +123,32 @@
     
     if(components.day>1)
     {
+          dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        
+        //[activityIndicator setHidden:NO];
+        [self.view addSubview:activityIndicator ];
+        [activityIndicator startAnimating];
+        
           dispatch_async(queue, ^{
         
         
         
+            
+              
+              NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=%i&b=%i&c=%i&d=%i&e=%i&f=%i&g='d'&ignore=.csv",what,date.month-1,date.day,date.year,[[MyDate getDate:MONTH] intValue]-1,[[MyDate getDate:DAY] intValue],[[MyDate getDate:YEAR] intValue] ];
         
-        
-           NSString * strURL = [NSString stringWithFormat:@"http://ichart.yahoo.com/table.csv?s=%@&a=%i&b=%i&c=%i&d=%@&e=%@&f=%@&g='d'&ignore=.csv",what,date.month,date.day,date.year,[MyDate getDate:MONTH],[MyDate getDate:DAY],[MyDate getDate:YEAR]];
-        
+              
         
            NSURL *url = [[NSURL alloc] initWithString:strURL];
            NSData *data = [NSData dataWithContentsOfURL:url];
            NSString * dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-           dispatch_async(dispatch_get_main_queue(), ^{
-             NSLog(@"Downloading data from: %@\n",strURL);
+              
+              
+              
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  
+                  
+                  NSLog(@"Downloading data from: %@\n",strURL);
               
             
             
@@ -135,44 +157,63 @@
              for(Quote* quote in quotes)
              {
                 
-                 NSLog(@"Date:%i-%i-%i Open:%lf High:%lf Low:%lf Close:%lf Volume:%lf AdjClose:%lf\n\n\n",quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
-                
-                [finDb insertFinData:quote];
+                 
+                 if([finDb rowCountFor:what onDate:quote.date]==0)
+                 {
+                     NSLog(@"Insert");
+                     [finDb insertFinData:quote];
+                 }
                 
                 
                 
              }
-            //[finDb deleteFindatas];
+               
            
              NSLog(@"DATE FROM DB WITH GET DATE FUNCTION: %i-%i-%i",date.year,date.month,date.day);
-            
-             NSMutableArray * queryResult = [finDb financialInfosFor:what];
-             NSLog(@"DB query result:\n\n\n");
-              
-             for(Quote* quote in queryResult)
-             {
-                NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
-             }
-            
+               
+               
+               NSMutableArray * queryResult = [finDb financialInfosFor:what];
+               NSLog(@"DB query result:\n\n\n");
+               for(Quote* quote in queryResult)
+               {
+                   NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
+                   
+                   NSString* formattedDate = [NSString stringWithFormat:@"%i/%i/%i",quote.date.year,quote.date.month,quote.date.day];
+                   [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:quote.open high:quote.high low:quote.low close:quote.close date:formattedDate]];
+               }
+               
+               CCSCandleStickViewController *candleStick =[[CCSCandleStickViewController alloc] init];
+               [candleStick initWithData:candlestickData];
+                  
+                  
+                  [activityIndicator stopAnimating];
+                  
+                  
+                  [self.navigationController pushViewController:candleStick animated:YES ];
             });
         
-            NSMutableArray * queryResult = [finDb financialInfosFor:what];
-            NSLog(@"DB query result:\n\n\n");
-            for(Quote* quote in queryResult)
-            {
-                NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
-            }
         });
     }
     else
     {
         
         NSMutableArray * queryResult = [finDb financialInfosFor:what];
+        
         NSLog(@"NO DOWNLOADED DATA : DB query result:\n\n\n");
         for(Quote* quote in queryResult)
         {
             NSLog(@"%@ %i-%i-%i %lf %lf %lf %lf %lf %lf",quote.name, quote.date.year,quote.date.month,quote.date.day,quote.open,quote.high,quote.low,quote.close,quote.volume,quote.adjClose);
+            
+            NSString* formattedDate = [NSString stringWithFormat:@"%i/%i/%i",quote.date.year,quote.date.month,quote.date.day];
+            [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:quote.open high:quote.high low:quote.low close:quote.close date:formattedDate]];
         }
+        
+        CCSCandleStickViewController *candleStick =[[CCSCandleStickViewController alloc] init];
+        [candleStick initWithData:candlestickData];
+        [self.navigationController pushViewController:candleStick animated:YES ];
+        
+        
+        //[finDb deleteFindatasFor:what];
         
     }
 }
@@ -252,7 +293,9 @@
     [super viewWillAppear:animated];
     
     NSLog(@"View will apear called.\n");
+    candlestickData = [[NSMutableArray alloc] init];
     [self refreshButtonTouched:nil ];
+    
     
     
     
@@ -393,9 +436,10 @@
 -(void)tableView:(UITableView *)tableview didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableview deselectRowAtIndexPath:indexPath animated:YES];
     SecondViewController *second = [[SecondViewController alloc] initSecondView: [tableData  objectAtIndex:indexPath.row] ]; //initWithNibName:@"SecondViewController" bundle:nil];
+    
     STFood * food = [tableData objectAtIndex:indexPath.row];
     [self doDownload:food.name];
-    [self.navigationController pushViewController:second animated:YES ];
+    
     
     //UITextView *textViewLocal = [[UITextView alloc] initWithFrame:CGRectMake(0,0,140,140)];
     //second.textView=textViewLocal;

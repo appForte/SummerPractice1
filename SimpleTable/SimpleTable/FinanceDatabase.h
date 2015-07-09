@@ -19,4 +19,5 @@
 -(void)insertFinData:(Quote*)quote;
 -(void)deleteFindatasFor:(NSString*)what;
 - (MyDate *)getDateOnlyFor:(NSString*)what;
+-(int)rowCountFor:(NSString*)what onDate:(MyDate*)date;
 @end

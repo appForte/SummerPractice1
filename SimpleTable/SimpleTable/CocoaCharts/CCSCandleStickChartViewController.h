@@ -12,5 +12,5 @@
 {
     NSMutableArray *candlestickData;
 }
-
+-(void)initWithData:(NSMutableArray*)stickData;
 @end

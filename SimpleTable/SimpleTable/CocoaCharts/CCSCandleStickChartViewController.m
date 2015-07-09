@@ -18,6 +18,12 @@
 
 @implementation CCSCandleStickViewController
 
+-(void)initWithData:(NSMutableArray*)stickData
+{
+    candlestickData=stickData;
+    
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -34,6 +40,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor grayColor];
 
 
@@ -62,9 +69,9 @@
 //    [linesdata addObject:lineMA10];
 //    [linesdata addObject:lineMA25];
 
-     candlestickData = [[NSMutableArray alloc] init];
+     /*candlestickData = [[NSMutableArray alloc] init];
 
-    [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:297 high:300 low:293 close:300 date:@"06/30"]];
+    [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:297 high:300 low:293 close:300 date:@"06/30/99"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:300 high:302 low:297 close:299 date:@"07/01"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:304 high:308 low:304 close:307 date:@"07/04"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:304 high:307 low:303 close:305 date:@"07/05"]];
@@ -163,7 +170,7 @@
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:227 high:232 low:227 close:231 date:@"11/18"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:228 high:235 low:228 close:233 date:@"11/21"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:229 high:238 low:229 close:236 date:@"11/22"]];
-    [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:232 high:236 low:224 close:225 date:@"11/24"]];
+    [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:232 high:236 low:224 close:225 date:@"11/24"]]; */
 
     CCSCandleStickChart *candleStickChart = [[CCSCandleStickChart alloc] initWithFrame:CGRectMake(0, MARGIN_TOP, 320, 320)];
 

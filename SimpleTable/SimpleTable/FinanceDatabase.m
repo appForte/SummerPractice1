@@ -155,7 +155,7 @@ static FinanceDatabase *_database;
     sqlite3_stmt *statement;
     
     if (sqlite3_exec(_database, [stmt UTF8String], NULL, &statement, NULL)== SQLITE_OK)
-    {   NSLog(@"Finance inserted.\n");
+    {  
         
         /*NSNumber *state = [NSNumber numberWithInteger:0];
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -184,5 +184,45 @@ static FinanceDatabase *_database;
     else
     {   NSLog(@"Delete error.\n");
     }
+}
+-(int)rowCountFor:(NSString*)what onDate:(MyDate*)date
+{   int numOfRows=0;
+     NSString *stmt;
+    
+    if(date.day>=1&&date.day<=9)
+    {
+        stmt = [NSString stringWithFormat:@"SELECT * FROM findatas WHERE finDataName = '%@' AND date = '%i-%i-0%i' ",what,date.year,date.month,date.day];
+        if(date.month>=1&&date.month<=9)
+        {
+            stmt = [NSString stringWithFormat:@"SELECT * FROM findatas WHERE finDataName = '%@' AND date = '%i-0%i-0%i' ",what,date.year,date.month,date.day];
+        }
+    }
+    else
+    {
+        stmt = [NSString stringWithFormat:@"SELECT * FROM findatas WHERE finDataName = '%@' AND date = '%i-%i-%i' ",what,date.year,date.month,date.day];
+        if(date.month>=1&&date.month<=9)
+        {
+            stmt = [NSString stringWithFormat:@"SELECT * FROM findatas WHERE finDataName = '%@' AND date = '%i-0%i-%i' ",what,date.year,date.month,date.day];
+        }
+    }
+    
+   
+    sqlite3_stmt *statement;
+    NSLog(@"%@",stmt);
+    
+    
+    if (sqlite3_prepare_v2(_database, [stmt UTF8String], -1, &statement, nil)== SQLITE_OK)
+    {
+        
+        while (sqlite3_step(statement) == SQLITE_ROW)
+        {
+            numOfRows++;
+            NSLog(@"Row:%i\n",numOfRows);
+            
+        }
+        sqlite3_finalize(statement);
+        
+    }
+    return numOfRows;
 }
 @end
