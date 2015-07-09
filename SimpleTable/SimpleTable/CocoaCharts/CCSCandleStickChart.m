@@ -91,7 +91,10 @@
                 }
             }
         } else {
-            for (NSInteger i = [self.stickData count] - 1; i > [self.stickData count] - self.maxSticksNum; i--) {
+            for (NSInteger i = [self.stickData count] - 1; i > [self.stickData count] - self.maxSticksNum; i--)
+            
+            //for(NSInteger i=([self.stickData count]-self.maxSticksNum)+1; i<[self.stickData count]-1;i++)
+            {
                 CCSCandleStickChartData *stick = [self.stickData objectAtIndex:i];
                 if (stick.open == 0 && stick.high == 0 && stick.low == 0) {
                     //停盘期间计算收盘价
@@ -237,7 +240,8 @@
         }
 
     }
-    self.longitudeTitles = TitleX;
+    
+    self.longitudeTitles = (NSMutableArray*)[[TitleX reverseObjectEnumerator] allObjects];
 }
 
 
@@ -263,7 +267,9 @@
         if (self.axisYPosition == CCSGridChartYAxisPositionLeft) {
             // 蜡烛棒起始绘制位置
             float stickX = self.axisMarginLeft + 1;
-            for (NSUInteger i = 0; i < [self.stickData count]; i++) {
+            //for (NSUInteger i = 0; i < [self.stickData count]; i++)
+             for (NSInteger i=[self.stickData count]-1; i>0; i--)
+             {
                 CCSCandleStickChartData *data = [self.stickData objectAtIndex:i];
                 float openY = ((1 - (data.open - self.minValue) / (self.maxValue - self.minValue)) * (rect.size.height - self.axisMarginBottom) - self.axisMarginTop);
                 float highY = ((1 - (data.high - self.minValue) / (self.maxValue - self.minValue)) * (rect.size.height - self.axisMarginBottom) - self.axisMarginTop);
@@ -361,7 +367,9 @@
         } else {
             // 蜡烛棒起始绘制位置
             float stickX = rect.size.width - self.axisMarginRight - 1 - stickWidth;
-            for (NSInteger i = [self.stickData count] - 1; i >= 0; i--) {
+            for (NSInteger i = [self.stickData count] - 1; i >= 0; i--)
+            //for (NSInteger i=0; i<[self.stickData count]-1; i++)
+            {
                 CCSCandleStickChartData *data = [self.stickData objectAtIndex:i];
                 float openY = ((1 - (data.open - self.minValue) / (self.maxValue - self.minValue)) * (rect.size.height - self.axisMarginBottom) - self.axisMarginTop);
                 float highY = ((1 - (data.high - self.minValue) / (self.maxValue - self.minValue)) * (rect.size.height - self.axisMarginBottom) - self.axisMarginTop);

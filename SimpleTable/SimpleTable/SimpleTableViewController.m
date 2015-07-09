@@ -50,6 +50,17 @@
    
     
 }
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    //[UIViewController attemptRotationToDeviceOrientation];
+    
+    //NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
+    //[[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+}
+
 -(NSArray*)tokenizeByRows:(NSString *) dataStr
 {
    NSArray *rows = [dataStr componentsSeparatedByString: @"\n"];

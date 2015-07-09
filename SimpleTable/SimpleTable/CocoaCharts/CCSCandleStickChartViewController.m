@@ -10,7 +10,7 @@
 #import "CCSCandleStickChart.h"
 #import "CCSCandleStickChartData.h"
 
-#define MARGIN_TOP 50.0
+#define MARGIN_TOP 100.0
 
 @interface CCSCandleStickViewController ()
 
@@ -182,9 +182,9 @@
     candleStickChart.minValue = 220;
     candleStickChart.displayLongitudeTitle = YES;
     candleStickChart.displayLatitudeTitle = YES;
-    candleStickChart.axisMarginBottom = 12;
-    candleStickChart.maxSticksNum = 60;
-    candleStickChart.axisMarginLeft = 30;
+    candleStickChart.axisMarginBottom = 12;   //12
+    candleStickChart.maxSticksNum = 200; //MENNYI ADATOT JELENITSEN MEG A GRAFIKONON
+    candleStickChart.axisMarginLeft = 30; //30
     candleStickChart.userInteractionEnabled = YES;
     candleStickChart.backgroundColor = [UIColor whiteColor];
     candleStickChart.candleStickStyle = CCSCandleStickStyleStandard;
