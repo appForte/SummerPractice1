@@ -23,12 +23,20 @@
     return self;
 }
 
--(void)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex
+-(void)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex andAdjust:(SimpleTableViewController*)adjust
 {
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.imageView.contentMode=UIViewContentModeScaleAspectFit;
-    button.frame = CGRectMake( 220,  10, 100, 30);
+    
+    
+    
+    /*CGFloat cellWidth = self.frame.size.width;
+    CGFloat cellHeight = self.frame.size.height; */
+    
+    NSLog(@"WIDTH CELL:%lf",adjust.view.frame.size.width);
+    
+    button.frame = CGRectMake(adjust.view.frame.size.width-100,10,100,30);
     
     self._favourite=state;
     

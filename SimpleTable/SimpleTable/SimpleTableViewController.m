@@ -22,6 +22,10 @@
 {
      NSMutableArray * candlestickData;
     UIActivityIndicatorView *activityIndicator;
+    int frameSizeWidth;
+    CGFloat adjust;
+    
+    CCSCandleStickViewController *_candleStick;
 }
 @end
 
@@ -35,6 +39,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
    
     foodData = [FoodData initialize];
     activityIndicator=[[UIActivityIndicatorView alloc]
@@ -47,7 +53,14 @@
     
     NSLog(@"View controller called.\n");
     
-   
+    [[UIDevice currentDevice] setValue:
+     [NSNumber numberWithInteger: UIInterfaceOrientationPortrait]
+                                forKey:@"orientation"];
+    
+    
+    
+    
+    
     
 }
 
@@ -59,6 +72,11 @@
     
     //NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
     //[[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+    
+    [self adjustViewsForOrientation:[[UIDevice currentDevice] orientation] ];
 }
 
 -(NSArray*)tokenizeByRows:(NSString *) dataStr
@@ -197,6 +215,7 @@
                   
                   [activityIndicator stopAnimating];
                   
+                  _candleStick=candleStick;
                   
                   [self.navigationController pushViewController:candleStick animated:YES ];
             });
@@ -219,6 +238,10 @@
         
         CCSCandleStickViewController *candleStick =[[CCSCandleStickViewController alloc] init];
         [candleStick initWithData:candlestickData];
+        
+        
+         _candleStick=candleStick;
+        
         [self.navigationController pushViewController:candleStick animated:YES ];
         
         
@@ -301,6 +324,7 @@
 
     [super viewWillAppear:animated];
     
+    
     NSLog(@"View will apear called.\n");
     candlestickData = [[NSMutableArray alloc] init];
     [self refreshButtonTouched:nil ];
@@ -308,8 +332,67 @@
     
     
     
+    [self adjustViewsForOrientation:[[UIDevice currentDevice] orientation] ];
+    
+    
+    
     
 }
+
+- (void) adjustViewsForOrientation:(UIDeviceOrientation) orientation {
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
+    CGFloat screenWidth = screenRect.size.width;
+    
+    CGFloat screenHeight = screenRect.size.height;
+    
+    NSLog(@"ScreenResolution:%lfX%lf",screenWidth,screenHeight);
+    
+    if(UIDeviceOrientationIsPortrait(orientation))
+    {
+        NSLog(@"Portrait view detected.\n");
+    }
+    else
+    {
+        NSLog(@"Landscape view detected.\n");
+    }
+    
+    switch (orientation)
+    {
+        
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationPortraitUpsideDown:
+        {
+            NSLog(@"Portrait view detected.\n");
+            frameSizeWidth=0;
+            adjust=screenWidth;
+            NSLog(@"%f",adjust);
+            
+            
+        }
+            
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+        case UIDeviceOrientationLandscapeRight:
+        {
+            NSLog(@"Landscape view detected.\n");
+            frameSizeWidth=160;
+            adjust=screenHeight;
+             NSLog(@"%f",adjust);
+        }
+            break;
+        case UIDeviceOrientationUnknown:
+            break;
+    }
+    [_tableView reloadData];
+    [_candleStick viewWillAppear:YES];
+}
+- (void)orientationChanged:(NSNotification *)notification
+{
+    [self adjustViewsForOrientation:[[UIDevice currentDevice] orientation]];
+}
+
 #pragma mark - MyTableViewCellDelegate
 -(void)didSwipeWithIndex:(int)_rowIndex
 {
@@ -378,10 +461,16 @@
     
     MyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
+    
+    
     if (cell == nil) {
-        cell = [[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
         
-        [cell initWithFood:food andState:state andRowIndex:indexPath.row];
+        
+        cell = [[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+                
+        
+        
+        [cell initWithFood:food andState:state andRowIndex:indexPath.row andAdjust:self];
     }
     else
     {
@@ -400,13 +489,26 @@
     //_tableView=tableView;
     CGRect frame = tableView.frame;
     
-    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width-60, 10, 50, 30)];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
+    
+    NSLog(@"Frame size width:%f",(frame.size.width-frameSizeWidth));
+    
+    NSLog(@"Adjust %f",adjust);
+    
+    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(adjust-60.0, 10, 50, 30)];
+    
+    
+    
     [addButton setTitle:@"+" forState:UIControlStateNormal];
     [addButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     addButton.backgroundColor = [UIColor whiteColor];
     [addButton addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton *refresh = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width-300, 10, 80, 30)];
+    NSLog(@"WIDTH::::::%lf",frame.size.width);  //320 ------ 480
+    
+    //(frame.size.width-frameSizeWidth)-300
+    UIButton *refresh = [[UIButton alloc] initWithFrame:CGRectMake(frame.origin.x+10, 10, 80, 30)];
     [refresh setTitle:@"Refresh" forState:UIControlStateNormal];
     [refresh setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
      refresh.backgroundColor = [UIColor whiteColor];
@@ -415,7 +517,12 @@
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, tableView.frame.size.width, 50.0)];
     sectionHeaderView.backgroundColor = [UIColor cyanColor];
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, sectionHeaderView.frame.size.width, 25.0)];
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, (adjust-frameSizeWidth)+frameSizeWidth, 25.0)];
+    
+    
+    //sectionHeaderView.frame.size.width
+    
+    
     headerLabel.text = @"Food Menu";
     headerLabel.backgroundColor = [UIColor clearColor];
     headerLabel.textAlignment = NSTextAlignmentCenter;
@@ -457,6 +564,10 @@
     
     
     
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[self adjustViewsForOrientation:[[UIDevice currentDevice] orientation] ];
 }
 
 - (void)didReceiveMemoryWarning

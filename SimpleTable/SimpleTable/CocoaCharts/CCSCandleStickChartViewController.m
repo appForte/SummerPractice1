@@ -13,7 +13,9 @@
 #define MARGIN_TOP 100.0
 
 @interface CCSCandleStickViewController ()
-
+{
+    CCSCandleStickChart *_candleStickChart;
+}
 @end
 
 @implementation CCSCandleStickViewController
@@ -36,8 +38,21 @@
     [super viewWillAppear:animated];
 
     self.title = @"Candle Stick Chart";
+    
+    
+    if(self.view.frame.size.width > self.view.frame.size.height)
+    {    NSLog(@"Candle:Landscape");
+    
+        
+        
+    }
+    else
+    {    NSLog(@"Candle:Portrait");
+    }
+    
+    
+    
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -171,11 +186,14 @@
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:228 high:235 low:228 close:233 date:@"11/21"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:229 high:238 low:229 close:236 date:@"11/22"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:232 high:236 low:224 close:225 date:@"11/24"]]; */
-
-    CCSCandleStickChart *candleStickChart = [[CCSCandleStickChart alloc] initWithFrame:CGRectMake(0, MARGIN_TOP, 320, 320)];
-
+    
+    
+    CCSCandleStickChart *candleStickChart = [[CCSCandleStickChart alloc] initWithFrame:CGRectMake(0, self.view.frame.origin.y+MARGIN_TOP, 320, self.view.frame.size.height-100)];
+    
+   
+    
     candleStickChart.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-
+    
     //设置stickData
     candleStickChart.stickData = candlestickData;
     candleStickChart.maxValue = 340;
@@ -189,14 +207,20 @@
     candleStickChart.backgroundColor = [UIColor whiteColor];
     candleStickChart.candleStickStyle = CCSCandleStickStyleStandard;
     
-    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(20, 10, 80, 30)];
+    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.origin.y+20, 80, 30)];
     [back setTitle:@"Back" forState:UIControlStateNormal];
     [back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     back.backgroundColor = [UIColor whiteColor];
     [back addTarget:self action:@selector(backButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:back];
     [self.view addSubview:candleStickChart];
+    
+    _candleStickChart=candleStickChart;
+    
+    
 }
+
+
 -(IBAction)backButtonTouched:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];

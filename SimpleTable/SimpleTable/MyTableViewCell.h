@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "STFood.h"
+#import "SimpleTableViewController.h"
 
 @protocol MyTableViewCellDelegate <NSObject>
 @required
@@ -28,7 +29,7 @@
 @property (nonatomic,strong,setter = cellContent:, getter = cellContent) NSString *_cellContent; */
 @property (nonatomic,assign,setter = favourite:, getter = favourite ) BOOL _favourite;
 @property (nonatomic, weak) id<MyTableViewCellDelegate> delegate;
--(void)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex;
+-(void)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex andAdjust:(SimpleTableViewController*)adjust;
 -(IBAction)favouriteButtonTouched:(id)sender;
 -(IBAction)handleSwipeGesture:(id)sender;
 -(BOOL)isFavourited;
