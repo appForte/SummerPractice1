@@ -33,6 +33,6 @@
 -(IBAction)favouriteButtonTouched:(id)sender;
 -(IBAction)handleSwipeGesture:(id)sender;
 -(BOOL)isFavourited;
--(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex;
+-(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex andAdjust:(SimpleTableViewController*)adjust;
 @end
 

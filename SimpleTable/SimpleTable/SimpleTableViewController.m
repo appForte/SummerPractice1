@@ -40,27 +40,18 @@
 {
     [super viewDidLoad];
     
-    
-   
     foodData = [FoodData initialize];
     activityIndicator=[[UIActivityIndicatorView alloc]
-     initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     
     [activityIndicator setHidesWhenStopped:YES];
     activityIndicator.center=self.view.center;
-    
-    //[self doDownload:@"AAPL"];
     
     NSLog(@"View controller called.\n");
     
     [[UIDevice currentDevice] setValue:
      [NSNumber numberWithInteger: UIInterfaceOrientationPortrait]
-                                forKey:@"orientation"];
-    
-    
-    
-    
-    
+                                  forKey:@"orientation"];
     
 }
 
@@ -68,20 +59,17 @@
 {
     [super viewDidAppear:animated];
     
-    //[UIViewController attemptRotationToDeviceOrientation];
-    
-    //NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
-    //[[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];    
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
     
     [self adjustViewsForOrientation:[[UIDevice currentDevice] orientation] ];
+    
 }
 
 -(NSArray*)tokenizeByRows:(NSString *) dataStr
 {
-   NSArray *rows = [dataStr componentsSeparatedByString: @"\n"];
+    NSArray *rows = [dataStr componentsSeparatedByString: @"\n"];
     return rows;
 }
 
@@ -92,9 +80,8 @@
 {
     NSArray* dataRows =[self tokenizeByRows:dataStr];
     NSMutableArray * quotes = [ [NSMutableArray alloc] init ];
-    
-    //NSArray * rowContent = [ [NSArray alloc] init];
     int numberOfRows = [dataRows count];
+    
     if(numberOfRows>0)
     {
         for(int i=1 ; i< numberOfRows-1; i++)
@@ -150,9 +137,8 @@
     
     if(components.day>1)
     {
-          dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         
-        //[activityIndicator setHidden:NO];
         [self.view addSubview:activityIndicator ];
         [activityIndicator startAnimating];
         
@@ -251,20 +237,12 @@
 }
 -(void)sortTableData
 {
-    //int k=0;
+   
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     [tableData sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         STFood * food1 = (STFood *) obj1;
         STFood * food2 = (STFood *) obj2;
-        
-        /*NSString * selectedRow1 =[ [NSString alloc] initWithFormat:@"%i",food1.ind];
-        NSNumber *state1 = [defaults objectForKey:selectedRow1];
-        
-        NSString * selectedRow2 =[ [NSString alloc] initWithFormat:@"%i",food2.ind];
-        NSNumber *state2 = [defaults objectForKey:selectedRow2];*/
-        
-        
         
         NSString * key = @"favouriteFoods";
         NSMutableArray * favouriteFoods = [defaults objectForKey:key];
@@ -283,40 +261,6 @@
         return state1 > state2;
     }];
     
-    
- /*
-    do
-    {
-        k=0;
-        for(int i=0; i < ([tableData count]-1); i++ )
-        {
-            STFood * food1 = [tableData objectAtIndex:i];
-            STFood * food2 = [tableData objectAtIndex:i+1];
-            
-            NSString * selectedRow1 =[ [NSString alloc] initWithFormat:@"%i",food1.ind];
-            NSNumber *state1 = [defaults objectForKey:selectedRow1];
-            
-            NSString * selectedRow2 =[ [NSString alloc] initWithFormat:@"%i",food2.ind];
-            NSNumber *state2 = [defaults objectForKey:selectedRow2];
-            
-            if(state1!=nil&&state2!=nil)
-            {   NSLog(@"state1:%i state2:%i\n",[state1 intValue],[state2 intValue]);
-                if([state1 intValue] > [state2 intValue])
-                {
-                    NSLog(@"R\n");
-                    [tableData replaceObjectAtIndex:i withObject:food2];
-                    [tableData replaceObjectAtIndex:i+1 withObject:food1];
-                    k=1;
-                }
-                
-            }
-            
-            
-            
-        }
-    }while(k==1);
-    */
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -324,22 +268,16 @@
 
     [super viewWillAppear:animated];
     
-    
     NSLog(@"View will apear called.\n");
+    
     candlestickData = [[NSMutableArray alloc] init];
     [self refreshButtonTouched:nil ];
-    
-    
-    
-    
     [self adjustViewsForOrientation:[[UIDevice currentDevice] orientation] ];
-    
-    
-    
     
 }
 
-- (void) adjustViewsForOrientation:(UIDeviceOrientation) orientation {
+-(void) adjustViewsForOrientation:(UIDeviceOrientation) orientation
+{
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     
@@ -420,29 +358,6 @@
     
     STFood * food = [tableData objectAtIndex:indexPath.row];
     
-    
-    //NSLog(@"Food with id:%i %@",food.ind,food.name);
-    /*NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * selectedRow =[ [NSString alloc] initWithFormat:@"%i",food.ind];
-    NSNumber *result = [defaults objectForKey:selectedRow];
-    
-    BOOL state = NO;
-    if(result!=nil)
-    {
-        if([result intValue]==1)
-        {   state=YES;
-            NSLog(@"Favourited\n");
-            
-        }
-        else
-        {
-            NSLog(@"NOT Favourited\n");
-            
-        }
-        
-    }*/
-    
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString * key = @"favouriteFoods";
     NSMutableArray * favouriteFoods = [defaults objectForKey:key];
@@ -463,7 +378,8 @@
     
     
     
-    if (cell == nil) {
+    if (cell == nil)
+    {
         
         
         cell = [[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
@@ -474,18 +390,20 @@
     }
     else
     {
-        [cell updateWithFood:food andState:state andRowIndex:indexPath.row];
+        [cell updateWithFood:food andState:state andRowIndex:indexPath.row andAdjust:self];
     }
     cell.delegate = self;
     return cell;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
     _tableView=tableView;
     return 50.0f;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
     //_tableView=tableView;
     CGRect frame = tableView.frame;
     
@@ -550,7 +468,8 @@
     [self.navigationController pushViewController:insertView animated:YES ];
 }
 
--(void)tableView:(UITableView *)tableview didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void)tableView:(UITableView *)tableview didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableview deselectRowAtIndexPath:indexPath animated:YES];
     //SecondViewController *second = [[SecondViewController alloc] initSecondView: [tableData  objectAtIndex:indexPath.row] ];
     
@@ -566,7 +485,8 @@
     
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
 	[self adjustViewsForOrientation:[[UIDevice currentDevice] orientation] ];
 }
 

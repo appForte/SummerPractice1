@@ -37,6 +37,16 @@
     NSLog(@"WIDTH CELL:%lf",adjust.view.frame.size.width);
     
     button.frame = CGRectMake(adjust.view.frame.size.width-100,10,100,30);
+
+    if(adjust.view.frame.size.width > adjust.view.frame.size.height)
+    {    NSLog(@"Cell:Landscape");
+        
+        
+        
+    }
+    else
+    {    NSLog(@"Cell:Portrait");
+    }
     
     self._favourite=state;
     
@@ -44,11 +54,10 @@
     [self addSubview:button];
     [button addTarget:self action:@selector(favouriteButtonTouched:) forControlEvents:UIControlEventTouchUpInside];    
     _button=button;
-    [self updateWithFood:food andState:state andRowIndex:rowIndex ];
+    [self updateWithFood:food andState:state andRowIndex:rowIndex andAdjust:adjust];
 }
 
--(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex
-{
+-(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex andAdjust:(SimpleTableViewController*)adjust{
     self.imageView.image = [UIImage imageNamed:food.imageName];
     self.textLabel.text=food.name;
     self._favourite=state;
@@ -56,6 +65,19 @@
     //_rowIndex=rowIndex;
     _rowIndex=food.ind;
     _swipped=NO;
+    
+    _button.frame = CGRectMake(adjust.view.frame.size.width-100,10,100,30);
+    
+    if(adjust.view.frame.size.width > adjust.view.frame.size.height)
+    {    NSLog(@"CELL UPDATE:Landscape");
+        
+        
+        
+    }
+    else
+    {    NSLog(@"CELL UPDATE:Portrait");
+    }
+    
     if(self._favourite == NO)
     {
         [_button setImage:[UIImage imageNamed:@"heart.png"] forState:UIControlStateNormal];

@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/InsertViewController.m"
-            timestampString = "457444914.986732"
+            timestampString = "458488746.140417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "-textFieldDidBeginEditing:"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/MyTableViewCell.m"
-            timestampString = "458222884.923652"
+            timestampString = "458469396.173409"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "-favouriteButtonTouched:"
             landmarkType = "5">
          </BreakpointContent>
@@ -152,11 +152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/MyTableViewCell.m"
-            timestampString = "458222884.923652"
+            timestampString = "458469396.173409"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "-handleSwipeGesture:"
             landmarkType = "5">
          </BreakpointContent>
@@ -168,11 +168,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/MyTableViewCell.m"
-            timestampString = "458222884.923652"
+            timestampString = "458469396.173409"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "-favouriteButtonTouched:"
             landmarkType = "5">
          </BreakpointContent>
@@ -184,11 +184,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/SimpleTableViewController.m"
-            timestampString = "458220914.59458"
+            timestampString = "458470120.104177"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "-makeQuotesFromData:withName:"
             landmarkType = "5">
          </BreakpointContent>
@@ -200,11 +200,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/SimpleTableViewController.m"
-            timestampString = "458220914.59458"
+            timestampString = "458470120.104177"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -216,11 +216,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SimpleTable/SimpleTableViewController.m"
-            timestampString = "458224492.556273"
+            timestampString = "458470120.104177"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "390"
-            endingLineNumber = "390"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
             landmarkName = "-adjustViewsForOrientation:"
             landmarkType = "5">
          </BreakpointContent>
