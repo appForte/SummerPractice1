@@ -187,13 +187,21 @@
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:229 high:238 low:229 close:236 date:@"11/22"]];
     [candlestickData addObject:[[CCSCandleStickChartData alloc] initWithOpen:232 high:236 low:224 close:225 date:@"11/24"]]; */
     
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height-self.view.frame.origin.y;
     
-    CCSCandleStickChart *candleStickChart = [[CCSCandleStickChart alloc] initWithFrame:CGRectMake(0, self.view.frame.origin.y+MARGIN_TOP, 320, self.view.frame.size.height-100)];
+    int candleStickHeight=screenHeight-80;
     
-   
     
-    candleStickChart.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    CCSCandleStickChart *candleStickChart = [[CCSCandleStickChart alloc] initWithFrame:CGRectMake(0, screenRect.origin.y+80, self.view.frame.size.width, candleStickHeight)];
     
+    
+    candleStickChart.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight |UIViewAutoresizingFlexibleWidth  ;
+    
+    NSLog(@"FRAME HEIGHT:%lf",self.view.frame.size.height);
+    
+    NSLog(@"SCREEN WIDTH:%lf",screenWidth);
     //设置stickData
     candleStickChart.stickData = candlestickData;
     candleStickChart.maxValue = 340;
@@ -207,11 +215,12 @@
     candleStickChart.backgroundColor = [UIColor whiteColor];
     candleStickChart.candleStickStyle = CCSCandleStickStyleStandard;
     
-    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.origin.y+20, 80, 30)];
+    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(20, screenRect.origin.y+20, 80, 20)];
     [back setTitle:@"Back" forState:UIControlStateNormal];
     [back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     back.backgroundColor = [UIColor whiteColor];
     [back addTarget:self action:@selector(backButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
+    back.autoresizingMask=UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:back];
     [self.view addSubview:candleStickChart];
     

@@ -29,10 +29,11 @@
 @property (nonatomic,strong,setter = cellContent:, getter = cellContent) NSString *_cellContent; */
 @property (nonatomic,assign,setter = favourite:, getter = favourite ) BOOL _favourite;
 @property (nonatomic, weak) id<MyTableViewCellDelegate> delegate;
--(void)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex andAdjust:(SimpleTableViewController*)adjust;
+
+-(id)initWithFood:(STFood *)food andState:(BOOL)state andRowIndex:(int)rowIndex ;
 -(IBAction)favouriteButtonTouched:(id)sender;
 -(IBAction)handleSwipeGesture:(id)sender;
 -(BOOL)isFavourited;
--(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex andAdjust:(SimpleTableViewController*)adjust;
+-(void) updateWithFood:(STFood*)food andState:(BOOL)state andRowIndex:(int)rowIndex ;
 @end
 

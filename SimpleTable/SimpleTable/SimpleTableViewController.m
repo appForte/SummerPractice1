@@ -376,22 +376,26 @@
     
     MyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
+    tableView.separatorColor = [UIColor whiteColor ];
     
-    
+        
     if (cell == nil)
     {
         
         
-        cell = [[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-                
+        cell = [[MyTableViewCell alloc] initWithFood:food andState:state andRowIndex:indexPath.row];
+        cell.textLabel.font = [UIFont fontWithName:@"Arial" size:15.0f];
+        cell.backgroundColor=[UIColor whiteColor];
         
+        cell.contentView.backgroundColor = [UIColor clearColor];
         
-        [cell initWithFood:food andState:state andRowIndex:indexPath.row andAdjust:self];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     else
     {
-        [cell updateWithFood:food andState:state andRowIndex:indexPath.row andAdjust:self];
+        [cell updateWithFood:food andState:state andRowIndex:indexPath.row];
     }
+    
     cell.delegate = self;
     return cell;
 }
@@ -407,14 +411,18 @@
     //_tableView=tableView;
     CGRect frame = tableView.frame;
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
     
     
     NSLog(@"Frame size width:%f",(frame.size.width-frameSizeWidth));
     
     NSLog(@"Adjust %f",adjust);
     
-    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(adjust-60.0, 10, 50, 30)];
+    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-60,10,50,30)];
+    
+    
+    addButton.autoresizingMask=UIViewAutoresizingFlexibleLeftMargin;
+    
     
     
     
@@ -427,10 +435,15 @@
     
     //(frame.size.width-frameSizeWidth)-300
     UIButton *refresh = [[UIButton alloc] initWithFrame:CGRectMake(frame.origin.x+10, 10, 80, 30)];
+    
+    refresh.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
+    
     [refresh setTitle:@"Refresh" forState:UIControlStateNormal];
     [refresh setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
      refresh.backgroundColor = [UIColor whiteColor];
     [refresh addTarget:self action:@selector(refreshButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
     
     
     UIView *sectionHeaderView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, tableView.frame.size.width, 50.0)];
