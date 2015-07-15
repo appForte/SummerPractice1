@@ -12,9 +12,10 @@
 #import "FoodDatabase.h"
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.1;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
-static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
-static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 264;
-static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
+static const CGFloat MAXIMUM_SCROLL_FRACTION = 1;
+static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
+static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =162;
+static BOOL returnPressed=NO;
 @interface InsertViewController ()
 {   CGFloat animatedDistance;
 }
@@ -91,25 +92,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
 }
 
 
-/*- (void)willAnimateRotationToInterfaceOrientation:
+- (void)willAnimateRotationToInterfaceOrientation:
  (UIInterfaceOrientation)toInterfaceOrientation
  duration:(NSTimeInterval)duration
  {
- if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
- toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
- {
- _labelMain.frame = CGRectMake(_labelName.frame.origin.x,_labelName.frame.origin.y,self.view.frame.size.width,_labelName.frame.size.height);
- 
- 
- 
- 
+     [self.view endEditing:YES];
  }
- else
- {
- _labelName.frame = CGRectMake(_labelName.frame.origin.x,_labelName.frame.origin.y,self.view.frame.size.width,_labelName.frame.size.height);
- 
- }
- }*/
+
+
 
 
 -(void)viewWillLayoutSubviews
@@ -125,6 +115,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
     frame.size.width=self.view.frame.size.width;
     _labelMain.frame=frame;
     
+   
+    
+    
+    CGRect frameBut;
+    frameBut.origin.x=self.view.center.x-30;
+    frameBut.origin.y=_saveBut.frame.origin.y;
+    frameBut.size.width=_saveBut.frame.size.width;
+    frameBut.size.height=_saveBut.frame.size.height;
+    _saveBut.frame=frameBut;
     
     
     
@@ -170,32 +169,44 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
     /*CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
     CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];*/
     
-    
-    CGFloat midline = textField.frame.origin.y + 0.5*textField.frame.size.height;
-    CGFloat numerator = midline - self.view.window.frame.origin.y - MINIMUM_SCROLL_FRACTION * self.view.window.frame.size.height;
-    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * self.view.window.frame.size.height;
-    
-    
-    
-    CGFloat heightFraction = numerator / denominator;
-    
-    
-    
-    NSLog(@"Height fraction:%lf",heightFraction);
-    
-    
-    if (heightFraction < 0.0)
-    {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0)
-    {
-        heightFraction = 1.0;
-    }
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+   
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (orientation == UIInterfaceOrientationPortrait ||
         orientation == UIInterfaceOrientationPortraitUpsideDown)
     {
+        
+        
+        CGFloat midline = textField.frame.origin.y + 0.5*textField.frame.size.height;
+        CGFloat numerator = midline - self.view.window.frame.origin.y - MINIMUM_SCROLL_FRACTION * self.view.window.frame.size.height;
+        CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * self.view.window.frame.size.height;
+        
+        
+        
+        CGFloat heightFraction = numerator / denominator;
+        
+        
+        
+        //NSLog(@"Height fraction:%lf",heightFraction);
+        
+        
+        if (heightFraction < 0.0)
+        {
+            heightFraction = 0.0;
+        }
+        else if (heightFraction > 1.0)
+        {
+            heightFraction = 1.0;
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
         
         
@@ -207,7 +218,33 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
     }
     else
     {
-        animatedDistance =LANDSCAPE_KEYBOARD_HEIGHT* heightFraction;
+        CGFloat midline = textField.frame.origin.y + 0.5*textField.frame.size.width;
+        CGFloat numerator = midline - self.view.window.frame.origin.y - MINIMUM_SCROLL_FRACTION * self.view.window.frame.size.width;
+        CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * self.view.window.frame.size.width;
+        
+        
+        
+        CGFloat heightFraction = numerator / denominator;
+        
+        
+        
+        //NSLog(@"Height fraction:%lf",heightFraction);
+        
+        
+        if (heightFraction < 0.0)
+        {
+            heightFraction = 0.0;
+        }
+        else if (heightFraction > 1.0)
+        {
+            heightFraction = 1.0;
+        }
+        
+        
+        
+        
+        
+        animatedDistance =floor(LANDSCAPE_KEYBOARD_HEIGHT* heightFraction);
         
         
         NSLog(@"LANDSCAPE KEYBOARD :%lf",animatedDistance);
@@ -225,10 +262,83 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
     [UIView commitAnimations];
     
     //[self animateTextField:textField up:YES];
+    
+    
+    //[self slideFrame:YES];
+    
 }
-
 -(void)textFieldDidEndEditing:(UITextField *)textField
-{  CGRect viewFrame = self.view.frame;
+{
+    
+    
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationPortrait ||
+        orientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        
+        
+        
+        CGFloat midline = textField.frame.origin.y + 0.5*textField.frame.size.height;
+        CGFloat numerator = midline - self.view.window.frame.origin.y - MINIMUM_SCROLL_FRACTION * self.view.window.frame.size.height;
+        CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * self.view.window.frame.size.height;
+        
+        //NSLog(@"WINDOW HEIGHT:%lf",self.view.window.frame.size.height);
+        CGFloat heightFraction = numerator / denominator;
+        
+        
+        
+        //NSLog(@"Height fraction:%lf",heightFraction);
+        
+        
+        if (heightFraction < 0.0)
+        {
+            heightFraction = 0.0;
+        }
+        else if (heightFraction > 1.0)
+        {
+            heightFraction = 1.0;
+        }
+        
+        animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
+        
+        NSLog(@"PORTRAIT KEYBOARD AT END :%lf",animatedDistance);
+    }
+    else
+    {
+        
+        CGFloat midline = textField.frame.origin.y + 0.5*textField.frame.size.width;
+        CGFloat numerator = midline - self.view.window.frame.origin.y - MINIMUM_SCROLL_FRACTION * self.view.window.frame.size.width;
+        CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * self.view.window.frame.size.width;
+        
+        //NSLog(@"WINDOW HEIGHT:%lf",self.view.window.frame.size.width);
+        CGFloat heightFraction = numerator / denominator;
+        
+        
+        
+        //NSLog(@"Height fraction:%lf",heightFraction);
+        
+        
+        if (heightFraction < 0.0)
+        {
+            heightFraction = 0.0;
+        }
+        else if (heightFraction > 1.0)
+        {
+            heightFraction = 1.0;
+        }
+        
+        animatedDistance =floor(LANDSCAPE_KEYBOARD_HEIGHT* heightFraction);
+        
+        
+        NSLog(@"LANDSCAPE KEYBOARD AT END :%lf",animatedDistance);
+    }
+    
+    
+    
+    
+    
+    CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += animatedDistance;
     
     
@@ -240,6 +350,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
     [self.view setFrame:viewFrame];
     
     [UIView commitAnimations];
+    
     
     
     //[self animateTextField:textField up:NO];
@@ -255,18 +366,39 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT =352;
     
     }
     
+    //[self slideFrame:NO];
+    
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
-{   [textField resignFirstResponder];
+{   returnPressed=YES;
+    [textField resignFirstResponder];
+    
+    
+    
     return YES;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    
     // Dispose of any resources that can be recreated.
 }
 
+
+/*-(void) slideFrame:(BOOL) up
+{
+    const int movementDistance = 50; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}*/
 
 
 
