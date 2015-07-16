@@ -43,7 +43,7 @@
     self.stickBorderColor = [UIColor yellowColor];
     self.stickFillColor = [UIColor yellowColor];
 
-    self.latitudeNum = 3;
+    self.latitudeNum = 10;
     self.longitudeNum = 3;
     self.maxSticksNum = 26;
     self.maxValue = 100;
@@ -136,6 +136,8 @@
 - (void)calcValueRangeFormatForAxis {
     //修正最大值和最小值
     long rate = (self.maxValue - self.minValue) / (self.latitudeNum);
+    
+    NSLog(@"MAX VALUE:%l MIN VALUE:%l",self.maxValue,self.minValue);
     NSString *strRate = [NSString stringWithFormat:@"%ld", rate];
     float first = [[strRate substringToIndex:1] intValue] + 1.0f;
     if (first > 0 && strRate.length > 1) {
@@ -173,11 +175,15 @@
 
 - (void)initAxisX {
     NSMutableArray *TitleX = [[NSMutableArray alloc] init];
+    
+    
     if (self.stickData != NULL && [self.stickData count] > 0) {
         float average = self.maxSticksNum / self.longitudeNum;
         CCSStickChartData *chartdata = nil;
         if (self.axisYPosition == CCSGridChartYAxisPositionLeft) {
             //处理刻度
+            
+            NSLog(@"LONGITUDE NUM:%i",self.longitudeNum);
             for (NSUInteger i = 0; i < self.longitudeNum; i++) {
                 NSUInteger index = (NSUInteger) floor(i * average);
                 if (index > self.maxSticksNum - 1) {
@@ -193,6 +199,9 @@
         }
         else {
             //处理刻度
+             NSLog(@"LONGITUDE NUM:%i",self.longitudeNum);
+            
+            
             for (NSUInteger i = 0; i < self.longitudeNum; i++) {
                 NSUInteger index = [self.stickData count] - self.maxSticksNum + (NSUInteger) floor(i * average);
                 if (index > [self.stickData count] - 1) {
@@ -201,6 +210,8 @@
                 chartdata = [self.stickData objectAtIndex:index];
                 //追加标题
                 [TitleX addObject:[NSString stringWithFormat:@"%@", chartdata.date]];
+                
+                
             }
             chartdata = [self.stickData objectAtIndex:[self.stickData count] - 1];
             //追加标题
@@ -208,7 +219,8 @@
         }
 
     }
-    self.longitudeTitles = TitleX;
+    
+    self.longitudeTitles = TitleX; 
 }
 
 - (void)initAxisY {
@@ -250,6 +262,8 @@
 - (void)drawRect:(CGRect)rect {
     //初始化XY轴
     [self initAxisY];
+    
+    
     [self initAxisX];
 
     [super drawRect:rect];
@@ -274,6 +288,9 @@
             // 蜡烛棒起始绘制位置
             float stickX = self.axisMarginLeft + 1;
             //判断显示为方柱或显示为线条
+            
+            NSLog(@"DRAW NUMBER OF DATA:%i",[self.stickData count]);
+            
             for (NSUInteger i = 0; i < [self.stickData count]; i++) {
                 CCSStickChartData *stick = [self.stickData objectAtIndex:i];
 
@@ -342,7 +359,7 @@
             } else if (value <= 0) {
                 result = ((CCSStickChartData *) [self.stickData objectAtIndex:0]).date;
             } else {
-                NSUInteger index = (NSUInteger) (self.maxSticksNum * value);
+                NSUInteger index =/*[self.stickData count] - self.maxSticksNum*/ + (NSUInteger) (self.maxSticksNum * value);
                 result = ((CCSStickChartData *) [self.stickData objectAtIndex:index]).date;
             }
         } else {
@@ -351,7 +368,7 @@
             } else if (value <= 0) {
                 result = ((CCSStickChartData *) [self.stickData objectAtIndex:[self.stickData count] - self.maxSticksNum]).date;
             } else {
-                NSUInteger index = [self.stickData count] - self.maxSticksNum + (NSUInteger) (self.maxSticksNum * value);
+                NSUInteger index =  (NSUInteger) (self.maxSticksNum * value);
                 if (index > [self.stickData count] - 1) {
                     index = [self.stickData count] - 1;
                 }
@@ -359,6 +376,7 @@
             }
         }
     }
+    NSLog(@"%@",result);
     return result;
 }
 
@@ -377,24 +395,29 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    //父类的点击事件
+    
     [super touchesBegan:touches withEvent:event];
-    //计算选中的索引
+    
+    NSLog(@"DATA CHART TOUCHED");
+   
     [self calcSelectedIndex];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    //调用父类的触摸事件
     [super touchesMoved:touches withEvent:event];
-    //计算选中的索引
+    
+    NSLog(@"DATA CHART TOUCHED-MOVED");
+    
     [self calcSelectedIndex];
 
     NSArray *allTouches = [touches allObjects];
-    //处理点击事件
+   
     if ([allTouches count] == 1) {
 
         CGPoint pt = CGPointMake(self.singleTouchPoint.x, self.coChart.singleTouchPoint.y);
-        //获取选中点
+        
+        NSLog(@"ALL TOUCHES COUNT AT POINT:(%lf,%lf)",pt.x,pt.y);
+       
         self.coChart.singleTouchPoint = pt;
         [self.coChart performSelector:@selector(setNeedsDisplay) withObject:nil afterDelay:0];
 
@@ -441,7 +464,6 @@
     }
 
 }
-
 - (void)setSelectedPointAddReDraw:(CGPoint)point {
     point.y = 1;
     self.singleTouchPoint = point;

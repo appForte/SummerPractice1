@@ -387,6 +387,8 @@
                     if (stickWidth >= 2) {
                         CGContextAddRect(context, CGRectMake(stickX, closeY, stickWidth, openY - closeY));
                         CGContextFillPath(context);
+                        
+                        
                     }
                     //绘制上下影线
                     CGContextMoveToPoint(context, stickX + stickWidth / 2, highY);

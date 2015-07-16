@@ -78,6 +78,8 @@ static BOOL returnPressed=NO;
     
     [_saveBut setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     [_saveBut setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    
+    
 
     [self.view addSubview:_saveBut];
     

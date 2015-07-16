@@ -277,6 +277,8 @@
             if (i < [self.latitudeTitles count]) {
                 NSString *str = (NSString *) [self.latitudeTitles objectAtIndex:i];
                 
+                NSLog(@"LATITUDE TITLES:%@",str);
+                
                 //处理成千分数形式
                 NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc] init];
                 decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -369,7 +371,7 @@
         offset = self.axisMarginLeft;
     }
     
-    for (NSUInteger i = 0; i <= [self.longitudeTitles count]; i++) {
+    for (NSUInteger i = [self.longitudeTitles count]; i >0; i--) {
         if (self.axisXPosition == CCSGridChartXAxisPositionBottom) {
                 CGContextMoveToPoint(context, offset + i * postOffset, 0);
                 CGContextAddLineToPoint(context, offset + i * postOffset, rect.size.height - self.axisMarginBottom);
@@ -412,11 +414,13 @@
         postOffset = (rect.size.width - 2 * self.axisMarginLeft - self.axisMarginRight) / ([self.longitudeTitles count] - 1);
         offset = self.axisMarginLeft;
     }
-        
+    NSLog(@"LONGITUDE TITLES COUNT:%i",[self.longitudeTitles count]);
     for (NSUInteger i = 0; i <= [self.longitudeTitles count]; i++) {
         if (self.axisXPosition == CCSGridChartXAxisPositionBottom) {
             if (i < [self.longitudeTitles count]) {
                 NSString *str = (NSString *) [self.longitudeTitles objectAtIndex:i];
+                
+                NSLog(@"LONGITUDE TITLE:%@",str);
                 
                 //调整X轴坐标位置
                 if (i == 0) {
@@ -449,6 +453,8 @@
             
             if (i < [self.longitudeTitles count]) {
                 NSString *str = (NSString *) [self.longitudeTitles objectAtIndex:i];
+                
+                 NSLog(@"LONGITUDE TITLE2:%@",str);
                 
                 //调整X轴坐标位置
                 if (i == 0) {
@@ -517,57 +523,62 @@
                 && self.singleTouchPoint.x < rect.size.width
                 && self.singleTouchPoint.y < rect.size.height - self.axisMarginBottom) {
 
-//            //获得标尺刻度
-//            NSString *meterY = [self calcAxisYGraduate:rect];
-//            NSString *meterX = [self calcAxisXGraduate:rect];
-//            
-//            //处理成千分数形式
-//            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
-//            decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
-//            
-//            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
 
 
-            //绘制横线
+
+            NSString *meterY = [self calcAxisYGraduate:rect];
+            NSString *meterX = [self calcAxisXGraduate:rect];
+ 
+ 
+            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
+            decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
+ 
+            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
+
+
+
             if (self.displayCrossXOnTouch) {
-//                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
-//                //填充方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
-//                //绘制线条
-//                CGContextFillPath(context);
 
-                //还原半透明
+
+                CGContextSetAlpha(context, 0.7);
+                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
+
+                CGContextFillPath(context);
+
+
                 CGContextSetAlpha(context, 1);
 
                 CGContextMoveToPoint(context, self.singleTouchPoint.x, 0);
                 CGContextAddLineToPoint(context, self.singleTouchPoint.x, rect.size.height - self.axisMarginBottom);
+                
 
-//                //绘制方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
-//                //绘制线条
+
+
+                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
+
                 CGContextStrokePath(context);
-//                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+              
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
-//                //绘制标尺刻度
-//                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 12)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize] 
-//                     lineBreakMode:UILineBreakModeTailTruncation 
-//                         alignment:NSTextAlignmentCenter];
-
+               
+                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 12)
+                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize]
+                    lineBreakMode:UILineBreakModeTailTruncation
+                         alignment:NSTextAlignmentCenter];
+                
+                
+               
             }
 
-            //绘制纵线与刻度
+            
             if (self.displayCrossYOnTouch) {
-//                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
-//                //填充方框
-//                CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
-//                //绘制线条
-//                CGContextFillPath(context);
+
+                CGContextSetAlpha(context, 0.7);
+                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+                CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
+
+                CGContextFillPath(context);
                 //还原半透明
                 CGContextSetAlpha(context, 1);
 
@@ -575,16 +586,16 @@
                 CGContextAddLineToPoint(context, rect.size.width, self.singleTouchPoint.y);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
+               CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
-//                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+//
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
-//                [meterY drawInRect:CGRectMake(1, self.singleTouchPoint.y - 5, self.axisMarginLeft-2, 50)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
-//                     lineBreakMode:NSLineBreakByWordWrapping 
-//                         alignment:NSTextAlignmentRight];
+               [meterY drawInRect:CGRectMake(1, self.singleTouchPoint.y - 5, self.axisMarginLeft-2, 50)
+                        withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
+                     lineBreakMode:NSLineBreakByWordWrapping
+                        alignment:NSTextAlignmentRight];
 
             }
         }
@@ -596,25 +607,24 @@
                 && self.singleTouchPoint.y < rect.size.height - self.axisMarginBottom) {
 
 //            //获得标尺刻度
-//            NSString *meterY = [self calcAxisYGraduate:rect];
-//            NSString *meterX = [self calcAxisXGraduate:rect];
-//            
+           NSString *meterY = [self calcAxisYGraduate:rect];
+           NSString *meterX = [self calcAxisXGraduate:rect];
 //            //处理成千分数形式
-//            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
-//            decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
-//            
-//            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
+            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
+            decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
+           
+           meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
 
             //绘制横线
             if (self.displayCrossXOnTouch) {
 
 //                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+                CGContextSetAlpha(context, 0.7);
+                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 //                //填充方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
+               CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
 //                //绘制线条
-//                CGContextFillPath(context);
+               CGContextFillPath(context);
 
                 //还原半透明
                 CGContextSetAlpha(context, 1);
@@ -623,17 +633,17 @@
                 CGContextAddLineToPoint(context, self.singleTouchPoint.x, rect.size.height - self.axisMarginBottom);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
+                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
 //                //绘制标尺刻度
-//                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 12)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize] 
-//                     lineBreakMode:UILineBreakModeTailTruncation 
-//                         alignment:NSTextAlignmentCenter];
+                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, rect.size.height - self.axisMarginBottom + 1, 70, 12)
+                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize]
+                     lineBreakMode:UILineBreakModeTailTruncation
+                         alignment:NSTextAlignmentCenter];
 
             }
 
@@ -641,12 +651,12 @@
             if (self.displayCrossYOnTouch) {
 
 //                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+                CGContextSetAlpha(context, 0.7);
+               CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 //                //填充方框
-//                CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
+               CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
 //                //绘制线条
-//                CGContextFillPath(context);
+               CGContextFillPath(context);
                 //还原半透明
                 CGContextSetAlpha(context, 1);
 
@@ -654,16 +664,16 @@
                 CGContextAddLineToPoint(context, rect.size.width - self.axisMarginRight, self.singleTouchPoint.y);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
+               CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
-//                [meterY drawInRect:CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 5, self.axisMarginRight-2, 50)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
-//                     lineBreakMode:NSLineBreakByWordWrapping 
-//                         alignment:NSTextAlignmentLeft];
+                [meterY drawInRect:CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 5, self.axisMarginRight-2, 50)
+                         withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
+                     lineBreakMode:NSLineBreakByWordWrapping
+                        alignment:NSTextAlignmentLeft];
             }
         }
 
@@ -675,24 +685,24 @@
                 && self.singleTouchPoint.y < rect.size.height) {
 
 //            //获得标尺刻度
-//            NSString *meterY = [self calcAxisYGraduate:rect];
-//            NSString *meterX = [self calcAxisXGraduate:rect];
+           NSString *meterY = [self calcAxisYGraduate:rect];
+            NSString *meterX = [self calcAxisXGraduate:rect];
 //            
 //            //处理成千分数形式
-//            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
-//            decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
+           NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
+           decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
 //            
-//            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
+            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
 
             //绘制横线
             if (self.displayCrossXOnTouch) {
 //                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+               CGContextSetAlpha(context, 0.7);
+               CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 //                //填充方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
+               CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
 //                //绘制线条
-//                CGContextFillPath(context);
+                CGContextFillPath(context);
 
                 //还原半透明
                 CGContextSetAlpha(context, 1);
@@ -701,29 +711,29 @@
                 CGContextAddLineToPoint(context, self.singleTouchPoint.x, rect.size.height);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
+                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
 //                //绘制标尺刻度
-//                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 12)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize] 
-//                     lineBreakMode:UILineBreakModeTailTruncation 
-//                         alignment:NSTextAlignmentCenter];
+               [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 12)
+                         withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize]
+                    lineBreakMode:UILineBreakModeTailTruncation
+                        alignment:NSTextAlignmentCenter];
             }
 
             //绘制纵线与刻度
             if (self.displayCrossYOnTouch) {
 
 //                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+              CGContextSetAlpha(context, 0.7);
+                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 //                //填充方框
-//                CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
+               CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
 //                //绘制线条
-//                CGContextFillPath(context);
+               CGContextFillPath(context);
                 //还原半透明
                 CGContextSetAlpha(context, 1);
 
@@ -731,16 +741,16 @@
                 CGContextAddLineToPoint(context, rect.size.width, self.singleTouchPoint.y);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
+                CGContextAddRect(context,CGRectMake(1, self.singleTouchPoint.y - 6, self.axisMarginLeft-2, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
-//                [meterY drawInRect:CGRectMake(1, self.singleTouchPoint.y - 5, self.axisMarginLeft-2, 50)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
-//                     lineBreakMode:NSLineBreakByWordWrapping 
-//                         alignment:NSTextAlignmentRight];
+                [meterY drawInRect:CGRectMake(1, self.singleTouchPoint.y - 5, self.axisMarginLeft-2, 50)
+                          withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
+                     lineBreakMode:NSLineBreakByWordWrapping
+                         alignment:NSTextAlignmentRight];
             }
         }
 
@@ -752,25 +762,25 @@
                 && self.singleTouchPoint.y < rect.size.height) {
 
 //            //获得标尺刻度
-//            NSString *meterY = [self calcAxisYGraduate:rect];
-//            NSString *meterX = [self calcAxisXGraduate:rect];
+           NSString *meterY = [self calcAxisYGraduate:rect];
+            NSString *meterX = [self calcAxisXGraduate:rect];
 //            
 //            //处理成千分数形式
-//            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
-//            decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
+            NSNumberFormatter *decimalformatter = [[NSNumberFormatter alloc]init];
+           decimalformatter.numberStyle = NSNumberFormatterDecimalStyle;
 //            
-//            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
+            meterY = [decimalformatter stringFromNumber:[NSNumber numberWithDouble:[meterY doubleValue]]];
 
 
             //绘制横线
             if (self.displayCrossXOnTouch) {
 //                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+               CGContextSetAlpha(context, 0.7);
+               CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 //                //填充方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
+               CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
 //                //绘制线条
-//                CGContextFillPath(context);
+                CGContextFillPath(context);
 
                 //还原半透明
                 CGContextSetAlpha(context, 1);
@@ -779,29 +789,29 @@
                 CGContextAddLineToPoint(context, self.singleTouchPoint.x, rect.size.height);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
+                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+               CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
 //                //绘制标尺刻度
-//                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 12)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize] 
-//                     lineBreakMode:UILineBreakModeTailTruncation 
-//                         alignment:NSTextAlignmentCenter];
+                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 12)
+                         withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize]
+                     lineBreakMode:UILineBreakModeTailTruncation
+                        alignment:NSTextAlignmentCenter];
             }
 
             //绘制纵线与刻度
             if (self.displayCrossYOnTouch) {
 
 //                //设置半透明
-//                CGContextSetAlpha(context, 0.7);
-//                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+              CGContextSetAlpha(context, 0.7);
+               CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 //                //填充方框
-//                CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
+               CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
 //                //绘制线条
-//                CGContextFillPath(context);
+                CGContextFillPath(context);
                 //还原半透明
                 CGContextSetAlpha(context, 1);
 
@@ -809,16 +819,16 @@
                 CGContextAddLineToPoint(context, rect.size.width - self.axisMarginRight, self.singleTouchPoint.y);
 
 //                //绘制方框
-//                CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
+                CGContextAddRect(context,CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 6, self.axisMarginRight-2, 14));
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-//                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
 
-//                [meterY drawInRect:CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 5, self.axisMarginRight-2, 50)
-//                          withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
-//                     lineBreakMode:NSLineBreakByWordWrapping 
-//                         alignment:NSTextAlignmentLeft];
+               [meterY drawInRect:CGRectMake(rect.size.width - self.axisMarginRight, self.singleTouchPoint.y - 5, self.axisMarginRight-2, 50)
+                         withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
+                     lineBreakMode:NSLineBreakByWordWrapping
+                         alignment:NSTextAlignmentLeft];
             }
         }
     }
@@ -835,14 +845,14 @@
 
 
 - (CGFloat)touchPointAxisXValue:(CGRect)rect {
-    if (self.axisYPosition == CCSGridChartYAxisPositionLeft) {
-        float length = rect.size.width - self.axisMarginLeft - 2 * self.axisMarginRight;
-        float valueLength = self.singleTouchPoint.x - self.axisMarginLeft - self.axisMarginRight;
+    if (self.axisYPosition == CCSGridChartYAxisPositionRight) {
+        float length = rect.size.width - self.axisMarginRight - 2 * self.axisMarginLeft;
+        float valueLength = self.singleTouchPoint.x - self.axisMarginRight - self.axisMarginLeft;
 
         return valueLength / length;
     } else {
-        float length = rect.size.width - 2 * self.axisMarginLeft - self.axisMarginRight;
-        float valueLength = self.singleTouchPoint.x - self.axisMarginLeft;
+        float length = rect.size.width - 2 * self.axisMarginRight - self.axisMarginLeft;
+        float valueLength = self.singleTouchPoint.x - self.axisMarginRight;
 
         return valueLength / length;
     }
@@ -895,13 +905,13 @@ float _minDistance = 8;
     NSArray *allTouches = [touches allObjects];
     //处理点击事件
     if ([allTouches count] == 1) {
-//        if(fabs([[allTouches objectAtIndex:0]locationInView:self].x - self.singleTouchPoint.x) > 5)
-//        {
+       if(fabs([[allTouches objectAtIndex:0]locationInView:self].x - self.singleTouchPoint.x) > 5)
+        {
         //获取选中点
         self.singleTouchPoint = [[allTouches objectAtIndex:0] locationInView:self];
         //设置可滚动
         [self performSelector:@selector(setNeedsDisplay) withObject:nil afterDelay:0];
-//        }
+       }
     } else if ([allTouches count] == 2) {
         CGPoint pt1 = [[allTouches objectAtIndex:0] locationInView:self];
         CGPoint pt2 = [[allTouches objectAtIndex:1] locationInView:self];
