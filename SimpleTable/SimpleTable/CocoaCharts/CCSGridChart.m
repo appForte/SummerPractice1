@@ -61,19 +61,19 @@
     [super initProperty];
 
     //初始化相关属性
-    self.axisXColor = [UIColor lightGrayColor];
-    self.axisYColor = [UIColor lightGrayColor];
-    self.borderColor = [UIColor lightGrayColor];
-    self.longitudeColor = [UIColor lightGrayColor];
-    self.latitudeColor = [UIColor lightGrayColor];
-    self.longitudeFontColor = [UIColor lightGrayColor];
-    self.latitudeFontColor = [UIColor lightGrayColor];
+    self.axisXColor = [UIColor blackColor];
+    self.axisYColor = [UIColor blackColor];
+    self.borderColor = [UIColor blackColor];
+    self.longitudeColor = [UIColor blackColor];
+    self.latitudeColor = [UIColor blackColor];
+    self.longitudeFontColor = [UIColor blackColor];
+    self.latitudeFontColor = [UIColor blackColor];
     self.crossLinesColor = [UIColor lightGrayColor];
-    self.crossLinesFontColor = [UIColor whiteColor];
-    self.longitudeFontSize = 11;
+    self.crossLinesFontColor = [UIColor blackColor];
+    self.longitudeFontSize = 9;
     self.latitudeFontSize = 11;
-    self.longitudeFont = [UIFont systemFontOfSize:self.longitudeFontSize];
-    self.latitudeFont = [UIFont systemFontOfSize:self.latitudeFontSize];
+    self.longitudeFont = [UIFont fontWithName:@"Arial" size:self.longitudeFontSize];
+    self.latitudeFont = [UIFont fontWithName:@"Arial" size:self.latitudeFontSize];
     self.axisMarginLeft = 40;
     self.axisMarginBottom = 16;
     self.axisMarginTop = 3;
@@ -715,7 +715,7 @@
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
+                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
 
 //                //绘制标尺刻度
                [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 12)
@@ -745,8 +745,8 @@
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-                CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
-
+                CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+                
                 [meterY drawInRect:CGRectMake(1, self.singleTouchPoint.y - 5, self.axisMarginLeft-2, 50)
                           withFont:[UIFont fontWithName:@"Helvetica" size:self.latitudeFontSize]
                      lineBreakMode:NSLineBreakByWordWrapping
@@ -776,7 +776,9 @@
             if (self.displayCrossXOnTouch) {
 //                //设置半透明
                CGContextSetAlpha(context, 0.7);
-               CGContextSetFillColorWithColor(context,self.crossLinesColor.CGColor);
+                
+                CGColorRef greenColor = CGColorRetain([UIColor greenColor].CGColor);
+               CGContextSetFillColorWithColor(context,greenColor);
 //                //填充方框
                CGContextAddRect(context,CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 14));
 //                //绘制线条
@@ -793,8 +795,9 @@
 //                //绘制线条
                 CGContextStrokePath(context);
 //                
-               CGContextSetFillColorWithColor(context,self.crossLinesFontColor.CGColor);
-
+               CGContextSetFillColorWithColor(context,greenColor);
+                
+                
 //                //绘制标尺刻度
                 [meterX drawInRect:CGRectMake(self.singleTouchPoint.x -35, self.axisMarginTop + 1, 70, 12)
                          withFont:[UIFont fontWithName:@"Helvetica" size:self.longitudeFontSize]
@@ -845,13 +848,44 @@
 
 
 - (CGFloat)touchPointAxisXValue:(CGRect)rect {
+    
+    int optimalWidth=rect.size.width;
+    
+    if(rect.size.width > rect.size.height)
+    {    NSLog(@"Touchpoint on:Landscape");
+        
+        optimalWidth=optimalWidth-53;
+        
+        
+        
+    }
+    else
+    {    NSLog(@"Touchpoint on:Portrait");
+    }
+    
+    
+    
+    
+    
     if (self.axisYPosition == CCSGridChartYAxisPositionRight) {
-        float length = rect.size.width - self.axisMarginRight - 2 * self.axisMarginLeft;
+        
+        
+        
+        
+        
+        
+        NSLog(@"Rect size width:%lf",rect.size.width);
+        
+        float length = optimalWidth - self.axisMarginRight - 2 * self.axisMarginLeft;
+        
         float valueLength = self.singleTouchPoint.x - self.axisMarginRight - self.axisMarginLeft;
 
         return valueLength / length;
     } else {
-        float length = rect.size.width - 2 * self.axisMarginRight - self.axisMarginLeft;
+        
+        NSLog(@"Rect size width:%lf",rect.size.width);
+        
+        float length = optimalWidth - 2 * self.axisMarginRight - self.axisMarginLeft;
         float valueLength = self.singleTouchPoint.x - self.axisMarginRight;
 
         return valueLength / length;

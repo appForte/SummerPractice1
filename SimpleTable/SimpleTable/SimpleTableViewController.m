@@ -440,7 +440,8 @@
     
     [refresh setTitle:@"Refresh" forState:UIControlStateNormal];
     [refresh setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-     refresh.backgroundColor = [UIColor whiteColor];
+    [refresh setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+    refresh.backgroundColor = [UIColor whiteColor];
     [refresh addTarget:self action:@selector(refreshButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
     
     
@@ -454,7 +455,7 @@
     //sectionHeaderView.frame.size.width
     
     
-    headerLabel.text = @"Food Menu";
+    headerLabel.text = @"Finance Datas";
     headerLabel.backgroundColor = [UIColor clearColor];
     headerLabel.textAlignment = NSTextAlignmentCenter;
     [headerLabel setFont:[UIFont fontWithName:@"Verdana" size:20.0]];

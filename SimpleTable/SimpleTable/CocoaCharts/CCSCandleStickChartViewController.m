@@ -15,6 +15,7 @@
 @interface CCSCandleStickViewController ()
 {
     CCSCandleStickChart *_candleStickChart;
+    //int colors;
 }
 @end
 
@@ -23,6 +24,7 @@
 -(void)initWithData:(NSMutableArray*)stickData
 {
     candlestickData=stickData;
+
     
 }
 
@@ -57,6 +59,8 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor grayColor];
+    
+      //colors=0;
 
 
 //    NSMutableArray *linesdata = [[[NSMutableArray alloc]init];
@@ -218,20 +222,35 @@
     UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(20, screenRect.origin.y+20, 80, 20)];
     [back setTitle:@"Back" forState:UIControlStateNormal];
     [back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [back setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
     back.backgroundColor = [UIColor whiteColor];
     [back addTarget:self action:@selector(backButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
     back.autoresizingMask=UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:back];
     [self.view addSubview:candleStickChart];
     
-    _candleStickChart=candleStickChart;
+    
+    
+    /*UIButton *changeColor = [[UIButton alloc] initWithFrame:CGRectMake(120, screenRect.origin.y+20, 130, 20)];
+    [changeColor setTitle:@"Change Color" forState:UIControlStateNormal];
+    [changeColor setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [changeColor setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+    changeColor.backgroundColor = [UIColor whiteColor];
+    [changeColor addTarget:self action:@selector(colorButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
+    changeColor.autoresizingMask=UIViewAutoresizingFlexibleBottomMargin;
+    [self.view addSubview:changeColor];
+    
+    _candleStickChart=candleStickChart; */
     
     
 }
 
 
+
+
 -(IBAction)backButtonTouched:(id)sender
 {
+   
     [self.navigationController popViewControllerAnimated:YES];
 
 }
